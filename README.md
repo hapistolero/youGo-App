@@ -1,10 +1,10 @@
 # yoga-app-api
 
-urutan mengerjakan 
--> buat dulu service atau fungsi yang menggunakan pihak ketiga(firebase/gcp) untuk membuat fungsi yang digunakan untuk menyimpan data di firestore atau gcp.
--> hubungkan service nya ke handler
--> lalu buat handler -> routes ->index
--> jangan lupa di register file nya di createServer.js
+#urutan mengerjakan 
+- buat dulu service atau fungsi yang menggunakan pihak ketiga(firebase/gcp) untuk membuat fungsi yang digunakan untuk menyimpan data di firestore atau gcp.
+- hubungkan service nya ke handler
+- lalu buat handler -> routes ->index
+- jangan lupa di register file nya di createServer.js
 -
 
 <b>keterangan</b>
