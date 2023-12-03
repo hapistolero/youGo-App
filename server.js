@@ -145,10 +145,7 @@ const init = async () => {
 
   await server.start()
 
-<<<<<<< HEAD
   // eslint-disable-next-line no-console
-=======
->>>>>>> origin/master
   console.log(`Server berjalan pada ${server.info.uri}`)
 }
 

@@ -44,6 +44,7 @@ class GcpBucket{
       await file.delete()
       return true
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error deleting file:', error)
       return false
     }
