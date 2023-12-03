@@ -1,18 +1,18 @@
 /* eslint-disable linebreak-style */
 // berkas penampung kode untuk membuat , mengkonfigurasi, dan menjalankan http server
 
-require('dotenv').config();
+require('dotenv').config()
 
 const users = require('./src/api/users')
 const authentications = require('./src/api/auth')
 const artikel = require('./src/api/artikel')
-const Hapi = require('@hapi/hapi');
+const profile = require('./src/api/profile')
+const Hapi = require('@hapi/hapi')
 
-const Jwt = require('@hapi/jwt');
+const Jwt = require('@hapi/jwt')
 
-const Inert = require('@hapi/inert');
+const Inert = require('@hapi/inert')
 
-const path = require('path');
 
 const init = async () => {
   const server = Hapi.server({
@@ -31,7 +31,7 @@ const init = async () => {
 
     },
 
-  });
+  })
 
   await server.register([
 
@@ -41,7 +41,7 @@ const init = async () => {
 
     },
 
-  ]);
+  ])
 
  
 
@@ -73,19 +73,22 @@ const init = async () => {
 
     }),
 
-  });
+  })
 
-  await server.register([{plugin:Inert}]);
+  await server.register([{plugin:Inert}])
 
   await server.register([{
     plugin: users
   },
-{
-  plugin:authentications
-},
-{
-  plugin:artikel
-}]);
+  {
+    plugin:authentications
+  },
+  {
+    plugin:artikel
+  },
+  {
+    plugin:profile
+  }])
 
 
   // server.ext('onPreResponse', (request, h) => {
@@ -140,9 +143,10 @@ const init = async () => {
   //   return h.continue;
   // });
 
-  await server.start();
+  await server.start()
 
-  console.log(`Server berjalan pada ${server.info.uri}`);
-};
+  // eslint-disable-next-line no-console
+  console.log(`Server berjalan pada ${server.info.uri}`)
+}
 
-init();
+init()

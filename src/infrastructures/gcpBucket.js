@@ -29,6 +29,26 @@ class GcpBucket{
     const imageUrl =`https://storage.googleapis.com/${bucketName}/${fileName}`
     return imageUrl
   }
-}
 
+  async  deleteFileFromBucket(fileUrl) {
+    try {
+      const { Storage } = require('@google-cloud/storage')
+      const storage = new Storage()
+  
+      const urlParts = fileUrl.split('/')
+      const bucketName = urlParts[3] // Extract bucket name from URL
+      const filePath = urlParts.slice(4).join('/')
+  
+      const file = storage.bucket(bucketName).file(filePath)
+  
+      await file.delete()
+      return true
+    } catch (error) {
+      console.error('Error deleting file:', error)
+      return false
+    }
+  
+  
+  }
+}
 module.exports = GcpBucket 
