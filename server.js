@@ -6,6 +6,7 @@ require('dotenv').config()
 const users = require('./src/api/users')
 const authentications = require('./src/api/auth')
 const artikel = require('./src/api/artikel')
+const profile = require('./src/api/profile')
 const pose = require('./src/api/pose')
 const Hapi = require('@hapi/hapi')
 
@@ -85,6 +86,9 @@ const init = async () => {
   },
   {
     plugin:artikel
+  },
+  {
+    plugin:profile
   },
   {
     plugin:pose

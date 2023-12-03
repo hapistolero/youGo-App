@@ -4,15 +4,15 @@ const routes = (handler) => [
     path: "/poses",
     handler: (request, h) => handler.postPoseHandler(request, h),
     options:{
-        auth: false, // false by default
-        payload: {
-           parse: true,
-           multipart: {
-                  output: 'stream'
-           },
-           maxBytes: 1000 * 1000 * 5, // 5 Mb
-        }
-     }, 
+      auth: false, // false by default
+      payload: {
+        parse: true,
+        multipart: {
+          output: 'stream'
+        },
+        maxBytes: 1000 * 1000 * 5, // 5 Mb
+      }
+    }, 
   }, 
 
   {
