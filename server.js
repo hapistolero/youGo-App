@@ -1,4 +1,4 @@
-/* eslint-disable linebreak-style */
+/* eslint-disable linebreak-style *///
 // berkas penampung kode untuk membuat , mengkonfigurasi, dan menjalankan http server
 
 require('dotenv').config()
@@ -6,7 +6,7 @@ require('dotenv').config()
 const users = require('./src/api/users')
 const authentications = require('./src/api/auth')
 const artikel = require('./src/api/artikel')
-const profile = require('./src/api/profile')
+const pose = require('./src/api/pose')
 const Hapi = require('@hapi/hapi')
 
 const Jwt = require('@hapi/jwt')
@@ -87,7 +87,7 @@ const init = async () => {
     plugin:artikel
   },
   {
-    plugin:profile
+    plugin:pose
   }])
 
 
@@ -145,7 +145,10 @@ const init = async () => {
 
   await server.start()
 
+<<<<<<< HEAD
   // eslint-disable-next-line no-console
+=======
+>>>>>>> origin/master
   console.log(`Server berjalan pada ${server.info.uri}`)
 }
 
