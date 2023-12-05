@@ -6,18 +6,16 @@
 - Lalu buat handler -> routes ->index
 - Jangan lupa di register file nya di createServer.js
 
-# keterangan
+#### Keterangan
 - Untuk membuat service, dibuat di folder service. Setiap handler dibuatkan service nya.
 - Untuk melihat handler, routes, API tolong dibuat di folder API (bisa lihat contoh sebelumnya ya).
 - Aplikasi utama server.js
 
 ## Penggunaan API
 ### Endpoint 
-#### Endpoint /Articles
+#### 1. Endpoint /Articles
 
-```
-Post /Articles
-```
+`Post /Articles`
 - Mengirim Artikel 
 - Dikirim melalui header multipart/form-data
 - Body Payload : id(text), title(text), description(text), imageUrl(file)
@@ -39,7 +37,7 @@ Post /Articles
 - Menghapus sebuah artikel
 - id merupakan ID dari sebuah artikel
 
-#### Endpoint /Authentications
+#### 2. Endpoint /Authentications
 
 `POST/authentications`
 - Meminta access token
@@ -52,7 +50,7 @@ Post /Articles
 `DELETE/authentications`
 - Menghapus access token
 
-#### Endpoint /Pose
+#### 3. Endpoint /Pose
 
 `POST/poses`
 - Menambahkan pose yoga
@@ -76,7 +74,7 @@ Post /Articles
 - id merupakan ID dari sebuah artikel
 - Body Payload : id (string), title (string), imageurl (file), category (string), step (string), time (string)
 
-#### Endpoint /profile
+#### 4. Endpoint /profile
 
 `POST/profile`
 - Menambahkan data profil user
@@ -94,7 +92,7 @@ Post /Articles
 - Body Payload : id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
 - Menggunakan user authentication
   
-#### Endpoint /schedule
+#### 5. Endpoint /schedule
 
 `POST/schedule`
 - Menambahkan data jadwal
@@ -120,7 +118,7 @@ Post /Articles
 - Mengubah data jadwal
 - Menggunakan user authentication
 
-### Endpoint /users
+### 6. Endpoint /users
 
 `POST/users`
 - Mendaftarkan account user
