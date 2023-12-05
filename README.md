@@ -6,7 +6,7 @@
 - Lalu buat handler -> routes ->index
 - Jangan lupa di register file nya di createServer.js
 
-#keterangan
+# keterangan
 - Untuk membuat service, dibuat di folder service. Setiap handler dibuatkan service nya.
 - Untuk melihat handler, routes, API tolong dibuat di folder API (bisa lihat contoh sebelumnya ya).
 - Aplikasi utama server.js
@@ -15,15 +15,17 @@
 ### Endpoint 
 #### Endpoint /Articles
 
-```Post /Articles```
+```
+Post /Articles
+```
 - Mengirim Artikel 
 - Dikirim melalui header multipart/form-data
 - Body Payload : id(text), title(text), description(text), imageUrl(file)
 
-```Get /Articles```
+`Get /Articles`
 - Mengambil semua artikel
 
-```Get /Articles/{id}```
+`Get /Articles/{id}`
 - Mengambil sebuah artikel berdasarkan ID-nya
 - id merupakan ID dari sebuah artikel
 
@@ -114,7 +116,7 @@
 - id merupakan ID dari jadwal
 - Menggunakan user authentication
 
-```PUT/schedule/{id}`
+`PUT/schedule/{id}`
 - Mengubah data jadwal
 - Menggunakan user authentication
 
