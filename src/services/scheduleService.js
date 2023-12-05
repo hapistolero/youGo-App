@@ -36,13 +36,50 @@ const pool = {
   db
 }
 
-const postArtikel = async (article)=>{
+
+async function getPoseById(poseId,pool){
+  const kind = 'pose' 
+  const query = pool.db
+    .createQuery(kind)
+    .filter('id', '=', poseId)
+
+  const [pose] = await pool.db.runQuery(query)
+
+      
+  if (!pose) {
+    throw new Error('pose not found')
+  }
+      
+      
+        
+      
+  return pose[0]
+} 
+async function getUserScheduleById(scheduleId,pool){
+  const kind = 'schedule' 
+  const query = pool.db
+    .createQuery(kind)
+    .filter('scheduleId', '=', scheduleId)
+
+
+  const [schedule] = await pool.db.runQuery(query)
+
+  if (!schedule || !schedule.length) {
+    throw new Error('schedule not found')
+  }
+      
+      
+        
+      
+  return schedule[0]
+} 
+const postSchedule = async (article,pool)=>{
   try {
     const entity = {
-      key: pool.db.key(['article']),
+      key: pool.db.key(['schedule']),
       data: article,
     }
-  
+    
     try {
       await pool.db.save(entity)
       return entity.data
@@ -56,86 +93,71 @@ const postArtikel = async (article)=>{
   }
 }
 
-const getAllArticles =async (pool)=>{
-  const kind = 'article' // Assuming 'articles' is the kind in your datastore
-
+const getUserAllSchedule =async (userId,pool)=>{
+  const kind = 'schedule' // Assuming 'articles' is the kind in your datastore
+  
   // Create a query to retrieve all articles
-  const query = pool.db.createQuery(kind)
-
-  const [articles] = await pool.db.runQuery(query)
-
- 
-
+  const query = pool.db
+    .createQuery(kind)
+    .filter('userId', '=', userId)
+  
+  const [schedule] = await pool.db.runQuery(query)
+  
+   
+  
   // const formattedArticle = articles.map((article)=>({
   //   id: article.id,
   //   title: article.title,
   //   description: article.description,
   // }))
-
-  return articles
+  
+  return schedule
 }
 
-async function getArticleById(articleId,pool) {
-  const kind = 'article' 
-  const query = pool.db
-    .createQuery(kind)
-    .filter('id', '=', articleId)
-
-  const [article] = await pool.db.runQuery(query)
-
-      
-  if (!article) {
-    throw new Error('Article not found')
-  }
-      
-      
-        
-      
-  return article[0]
-}
-
-async function UpdateArticleById(ArticleData, pool) {
+async function UpdateScheduleById(ScheduleData, pool) {
   try {
-    const query = pool.db.createQuery('article').filter('id', '=', ArticleData.id)
+    const query = pool.db.createQuery('schedule').filter('scheduleId', '=', ScheduleData.scheduleId)
     const [entities] = await pool.db.runQuery(query)
-
+  
     if (entities && entities.length > 0) {
       const entityKey = entities[0][pool.db.KEY] // Assuming the key is needed for update
-
+  
       // Update the entity data with ArticleData
       const updatedEntity = {
         key: entityKey,
-        data: { ...entities[0], ...ArticleData },
+        data: { ...entities[0], ...ScheduleData },
       }
-
+  
       // Save the updated entity back to the Datastore
-      const updatedArticle = await pool.db.update(updatedEntity)
-      
-      if (!updatedArticle) {
+      const updatedSchedule = await pool.db.update(updatedEntity)
+        
+      if (!updatedSchedule) {
         throw new Error('Failed to update Article')
       }
-
-      return updatedArticle
+  
+      return updatedSchedule
     } else {
       throw new Error('Article not found')
     }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error updating Article:', error.message)
+    console.error('Error updating Schedule:', error.message)
     throw error
   }
 }
 
-const deleteArticle=async(articleId,pool)=> {
+const deleteSchedule=async(scheduleId,pool)=> {
   try {
-    const kind = 'article'
-    
+    const kind = 'schedule'
+  
+    // Create a query with an explicit filter for the refreshToken
     const query = pool.db
       .createQuery(kind)
-      .filter('id', '=', articleId)
-
+      .filter('scheduleId', '=', scheduleId)
+  
     const [entities] = await pool.db.runQuery(query)
-
+  
+  
     if (entities.length > 0) {
       const entityKey = entities[0][pool.db.KEY]
       await pool.db.delete(entityKey)
@@ -143,7 +165,7 @@ const deleteArticle=async(articleId,pool)=> {
     }else{
       return false
     }
-    
+      
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error)
@@ -152,4 +174,5 @@ const deleteArticle=async(articleId,pool)=> {
 }
 
 
-module.exports ={ postArtikel, getAllArticles, getArticleById, UpdateArticleById,deleteArticle,pool}
+  
+module.exports = {getPoseById,postSchedule,getUserAllSchedule,UpdateScheduleById,getUserScheduleById,deleteSchedule,pool}

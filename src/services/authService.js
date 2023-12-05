@@ -89,10 +89,14 @@ const deleteToken=async(token,pool)=> {
 
     const [entities] = await pool.db.runQuery(query)
 
-    if (entities.length < 0) {
+    if (entities.length > 0) {
       const entityKey = entities[0][pool.db.KEY]
       await pool.db.delete(entityKey)
+      return true
+    }else{
+      return false
     }
+   
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error)

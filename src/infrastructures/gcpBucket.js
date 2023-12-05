@@ -32,16 +32,14 @@ class GcpBucket{
 
   async  deleteFileFromBucket(fileUrl) {
     try {
-      const { Storage } = require('@google-cloud/storage')
-      const storage = new Storage()
   
       const urlParts = fileUrl.split('/')
       const bucketName = urlParts[3] // Extract bucket name from URL
       const filePath = urlParts.slice(4).join('/')
   
-      const file = storage.bucket(bucketName).file(filePath)
+      await this._storage.bucket(bucketName).file(filePath).delete()
   
-      await file.delete()
+  
       return true
     } catch (error) {
       // eslint-disable-next-line no-console

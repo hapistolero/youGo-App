@@ -26,5 +26,25 @@ const routes = (handler) => [
     path: "/articles/{id}",
     handler: (request, h) => handler.getArticleByIdHandler(request,h),
   },
+  {
+    method: "DELETE",
+    path: "/articles/{id}",
+    handler: (request, h) => handler.deleteArticleByIdHandler(request,h),
+  },
+  {
+    method: "PUT",
+    path: "/articles/{id}",
+    handler: (request, h) => handler.updateArticle(request,h),
+    options:{
+      auth: false, // false by default
+      payload: {
+        parse: true,
+        multipart: {
+          output: 'stream'
+        },
+        maxBytes: 1000 * 1000 * 5, // 5 Mb
+      }
+    }
+  },
 ]
 module.exports = routes

@@ -1,21 +1,23 @@
 const { pool } = require("../../infrastructures/firestore")
 const GcpBucket = require('../../infrastructures/gcpBucket')
-const { postPose, getAllPoses, getPoseById } = require("../../services/poseService")
+const { postPose, getAllPoses, getPoseById, UpdatePoseById, deletePoseById } = require("../../services/poseService")
 
 class PosesHandler {
   constructor() {
     this.postPoseHandler = this.postPoseHandler.bind(this)
     this.getAllPosesHandler = this.getAllPosesHandler.bind(this)
     this.getPoseByIdHandler = this.getPoseByIdHandler.bind(this)
-
+    this.updatePoseHandler = this.updatePoseHandler.bind(this)
+    this.deletePoseByIdHandler = this.deletePoseByIdHandler.bind(this)
+    this._pool = pool
     this._gcpBucket = new GcpBucket()
   }
 
   async postPoseHandler (request, h) {
     try {
-      const {id, title, imageurl, category, step, time} = request.payload
+      const {id, title, imageUrl, category, step, time} = request.payload
 
-      if (!id || !title || !imageurl || !category || !step || !time) {
+      if (!id || !title || !imageUrl || !category || !step || !time) {
         const response = h.response({
           status: 'fail', 
           message: 'Not sending specific input',
@@ -35,12 +37,12 @@ class PosesHandler {
         response.code(400)
         return response
       }
-      const url = await this._gcpBucket.uploadImagToBucket('poses',imageurl)
+      const url = await this._gcpBucket.uploadImagToBucket('poses',imageUrl)
 
       const poseDetails = {
         id,
         title,
-        imageurl: url,
+        imageUrl: url,
         category,
         step,
         time,
@@ -122,6 +124,109 @@ class PosesHandler {
       return response
     }
   }
+
+  async updatePoseHandler (request, h){
+    const {
+      imageUrl, category, step, time
+    } = request.payload
+
+    const {id} = request.params
+    
+    if(!id||!imageUrl||!category||!step||!time){
+      const response = h.response({
+        status:'fail',
+        mesage:'input dont have specific property'
+      })
+      response.code(400)
+      return response
+    }
+
+    if(
+      typeof id !=='string'||
+        typeof step !=='string' ||
+        typeof time !=='string' ||
+        typeof category !=='string'
+    ){
+      const response = h.response({
+        status:'fail',
+        message:'not meet specific datatypes'
+      })
+      response.code(400)
+      return response
+    }
+    // dia update tapi cuman hapus profile nya
+    // 1.di kirim payload kosong
+    // 2. kalo sebelumnya  dia punya imageUrl harus di check terus dihapus
+    
+   
+    const foundedPose = await getPoseById(id,this._pool)
+    await this._gcpBucket.deleteFileFromBucket(foundedPose.imageUrl)
+    if (imageUrl && imageUrl instanceof Buffer && imageUrl.length > 0) {
+      const response = h.response({
+        status:'fail',
+        message:'not sending image'
+      })
+      response.code(400)
+      return response
+    }   
+    const url = await this._gcpBucket.uploadImagToBucket('poses',imageUrl)
+
+    const updatedPose={
+      id:foundedPose.id,
+      imageUrl:url,
+      category:category,
+      step:step,
+      time:time,
+      createdAt:foundedPose.createdAt,
+      updatedAt: Date.now().toLocaleString()
+    }
+
+    await UpdatePoseById(updatedPose,this._pool)
+
+    const response = h.response({
+      status:'success',
+      message:updatedPose
+    })
+    response.code(400)
+    return response
+  }
+
+  async deletePoseByIdHandler(request,h){
+    try {
+      const { id } = request.params
+      const foundedPose = await getPoseById(id,this._pool)
+      await this._gcpBucket.deleteFileFromBucket(foundedPose.imageUrl)
+      const pose = await deletePoseById(id, pool)
+
+      if (!pose) {
+        const notFoundResponse = h.response({
+          status: 'fail',
+          message: 'Pose not found',
+        })
+        notFoundResponse.header('Access-Control-Allow-Origin', '*')
+        notFoundResponse.code(404)
+        return notFoundResponse
+      }
+
+      const successResponse = h.response({
+        status: 'success',
+        data: pose,
+      })
+      successResponse.header('Access-Control-Allow-Origin', '*')
+      successResponse.code(200)
+      return successResponse
+    } catch (error) {
+      const response = h.response({
+        status: 'fail',
+        message: error.message,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(500)
+      return response
+    }
+  }
+
+
 }
 
 module.exports = PosesHandler

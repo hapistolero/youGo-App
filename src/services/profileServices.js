@@ -58,6 +58,8 @@ async function UpdateUserById(userData, pool) {
   
   try {
     // Assuming pool.db.update is an asynchronous function that updates the user
+
+    
     const updatedUser = await pool.db.update(userData)
   
   
@@ -75,6 +77,7 @@ async function UpdateUserById(userData, pool) {
     throw error // Rethrow the error to propagate it up the call stack
   }
 }
+
 const getAllUserProfile =async (pool)=>{
   const kind = 'users' // Assuming 'articles' is the kind in your datastore
 

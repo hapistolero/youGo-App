@@ -8,6 +8,7 @@ const authentications = require('./src/api/auth')
 const artikel = require('./src/api/artikel')
 const profile = require('./src/api/profile')
 const pose = require('./src/api/pose')
+const schedule = require('./src/api/schedule')
 const Hapi = require('@hapi/hapi')
 
 const Jwt = require('@hapi/jwt')
@@ -92,6 +93,9 @@ const init = async () => {
   },
   {
     plugin:pose
+  },
+  {
+    plugin:schedule
   }])
 
 

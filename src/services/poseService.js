@@ -50,6 +50,7 @@ const postPose = async (pose)=>{
       throw new Error(err.message)
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log(error.message)
     return error
   }
@@ -67,7 +68,7 @@ const getAllPoses = async (pool)=>{
   const formattedPose = poses.map((pose)=>({
     id: pose.id,
     title: pose.title,
-    imageurl: pose.imageurl,
+    imageUrl: pose.imageUrl,
     category: pose.category,
     step: pose.step,
     time: pose.time,
@@ -89,7 +90,66 @@ async function getPoseById (poseId, pool) {
     throw new Error('Pose not found')
   }
 
-  return pose
+  return pose[0]
 }
 
-module.exports = {postPose, getAllPoses, getPoseById}
+async function UpdatePoseById(PoseData, pool) {
+  try {
+    const query = pool.db.createQuery('pose').filter('id', '=', PoseData.id)
+    const [entities] = await pool.db.runQuery(query)
+
+    if (entities && entities.length > 0) {
+      const entityKey = entities[0][pool.db.KEY] // Assuming the key is needed for update
+
+      // Update the entity data with PoseData
+      const updatedEntity = {
+        key: entityKey,
+        data: { ...entities[0], ...PoseData },
+      }
+
+      // Save the updated entity back to the Datastore
+      const updatedPose = await pool.db.update(updatedEntity)
+      
+      if (!updatedPose) {
+        throw new Error('Failed to update Pose')
+      }
+
+      return updatedPose
+    } else {
+      throw new Error('Pose not found')
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error updating Pose:', error.message)
+    throw error
+  }
+
+  
+}
+
+const deletePoseById=async(poseId,pool)=> {
+  try {
+    const kind = 'pose'
+
+    // Create a query with an explicit filter for the refreshToken
+    const query = pool.db
+      .createQuery(kind)
+      .filter('id', '=', poseId)
+
+    const [entities] = await pool.db.runQuery(query)
+
+    if (entities.length > 0) {
+      const entityKey = entities[0][pool.db.KEY]
+      await pool.db.delete(entityKey)
+      return true
+    }else{
+      return false
+    }
+   
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error)
+    throw new Error(error.message)
+  }
+}
+module.exports = {postPose, getAllPoses, getPoseById,UpdatePoseById,deletePoseById}
