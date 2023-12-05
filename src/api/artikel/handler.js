@@ -15,9 +15,9 @@ class ArtikelHandler {
 
   async postArtikelHandler(request, h) {
     try {
-      const { id, title, description, file } = request.payload
+      const { id, title, description, imageUrl } = request.payload
 
-      if (!id || !title || !description  || !file) {
+      if (!id || !title || !description  || !imageUrl) {
         const response = h.response({
           status: 'fail',
           message: 'Not sending specific input',
@@ -36,7 +36,7 @@ class ArtikelHandler {
         response.code(400)
         return response
       }
-      const url = await this._gcpBucket.uploadImagToBucket('articles',file)
+      const url = await this._gcpBucket.uploadImagToBucket('articles',imageUrl)
       // Now you can save the article details to Firestore or perform other actions
       const articleDetails = {
         id,
