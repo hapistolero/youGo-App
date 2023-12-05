@@ -1,29 +1,29 @@
 # **youGo-App-API**
 
-# Urutan Mengerjakan 
+## Urutan Mengerjakan 
 - Buat dulu service atau fungsi yang menggunakan pihak ketiga(firebase/gcp) untuk membuat fungsi yang digunakan untuk menyimpan data di firestore atau gcp.
 - Hubungkan service nya ke handler
 - Lalu buat handler -> routes ->index
 - Jangan lupa di register file nya di createServer.js
 
-<b>keterangan</b>
+#keterangan
 - Untuk membuat service, dibuat di folder service. Setiap handler dibuatkan service nya.
 - Untuk melihat handler, routes, API tolong dibuat di folder API (bisa lihat contoh sebelumnya ya).
 - Aplikasi utama server.js
 
-# Penggunaan API
-## Endpoint 
-### Endpoint /Articles
+## Penggunaan API
+### Endpoint 
+#### Endpoint /Articles
 
-`Post /Articles`
+```Post /Articles```
 - Mengirim Artikel 
 - Dikirim melalui header multipart/form-data
 - Body Payload : id(text), title(text), description(text), imageUrl(file)
 
-`Get /Articles`
+```Get /Articles```
 - Mengambil semua artikel
 
-`Get /Articles/{id}`
+```Get /Articles/{id}```
 - Mengambil sebuah artikel berdasarkan ID-nya
 - id merupakan ID dari sebuah artikel
 
@@ -37,7 +37,7 @@
 - Menghapus sebuah artikel
 - id merupakan ID dari sebuah artikel
 
-### Endpoint /Authentications
+#### Endpoint /Authentications
 
 `POST/authentications`
 - Meminta access token
@@ -50,7 +50,7 @@
 `DELETE/authentications`
 - Menghapus access token
 
-### Endpoint /Pose
+#### Endpoint /Pose
 
 `POST/poses`
 - Menambahkan pose yoga
@@ -58,7 +58,7 @@
 - Body Payload : id (string), title (string), imageurl (file), category (string), step (string), time (string)
   
 `GET/poses`
--Menampilkan semua data pose yoga
+- Menampilkan semua data pose yoga
 
 `GET/poses/{id}`
 - Menampilkan data pose yoga berdasarkan ID
@@ -74,7 +74,7 @@
 - id merupakan ID dari sebuah artikel
 - Body Payload : id (string), title (string), imageurl (file), category (string), step (string), time (string)
 
-### Endpoint /profile
+#### Endpoint /profile
 
 `POST/profile`
 - Menambahkan data profil user
@@ -92,7 +92,7 @@
 - Body Payload : id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
 - Menggunakan user authentication
   
-### Endpoint /schedule
+#### Endpoint /schedule
 
 `POST/schedule`
 - Menambahkan data jadwal
@@ -114,7 +114,7 @@
 - id merupakan ID dari jadwal
 - Menggunakan user authentication
 
-`PUT/schedule/{id}`
+```PUT/schedule/{id}`
 - Mengubah data jadwal
 - Menggunakan user authentication
 
