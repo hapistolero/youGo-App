@@ -55,7 +55,7 @@
 `POST/poses`
 - Menambahkan pose yoga
 - Dikirim melalui multipart/form-data
-- Body Payload : id (string), title (string), imageurl (file), category (string), step (string), time (string)
+- Body Payload : id (string), title (string), imageUrl (file), category (string), step (string), time (string)
   
 `GET/poses`
 - Menampilkan semua data pose yoga
@@ -72,7 +72,7 @@
 - Mengubah data pose yoga
 - Dikrim melalui header multipart/form-data
 - id merupakan ID dari sebuah artikel
-- Body Payload : id (string), title (string), imageurl (file), category (string), step (string), time (string)
+- Body Payload : id (string), title (string), imageUrl (file), category (string), step (string), time (string)
 
 #### 4. Endpoint /profile
 
