@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node server.js  export GOOGLE_APPLICATION_CREDENTIALS='credentials.json'",
     "dev": "nodemon server.js  export GOOGLE_APPLICATION_CREDENTIALS='credentials.json'"
   },
   "author": "hapistolero and friends",
