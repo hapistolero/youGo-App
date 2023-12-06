@@ -78,7 +78,7 @@
 
 `POST/profile`
 - Menambahkan data profil user
-- Dikirim melalui header multipart/raw/JSON
+- Dikirim melalui header application/JSON
 - Body Payload : id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
 - Menggunakan user authentication
 
@@ -88,7 +88,7 @@
 
 `PUT/profile`
 - Mengupdate data profil user
-- Dikirim melalui header multipart/raw/JSON
+- Dikirim melalui header application/JSON
 - Body Payload : id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
 - Menggunakan user authentication
   
@@ -96,7 +96,7 @@
 
 `POST/schedule`
 - Menambahkan data jadwal
-- Dikirim melalui header multipart/raw/JSON
+- Dikirim melalui header application/JSON
 - Body Payload : poseId, scheduleName (string), dayTime (string)
 - Menggunakan user authentication
 
