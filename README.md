@@ -1,4 +1,4 @@
-# yoga-app-api
+# youGo-app-api
 
 # urutan mengerjakan 
 - buat dulu service atau fungsi yang menggunakan pihak ketiga(firebase/gcp) untuk membuat fungsi yang digunakan untuk menyimpan data di firestore atau gcp.
@@ -13,32 +13,31 @@
 - aplikasi utama server.js
 -
 
-# yang sudah
+# Pengunaan Api
+Endpoint 
+Endpoint /Articles
 
--fitur register POST
-email  
-pasword 
+Post /Articles
+- Mengirim Artikel 
+- Dikirim melalui header multipart/form-data
+- Body Payload : id(text), title(text), description(text), imageUrl(file)
 
--fitur login POST
-email  
-password  
+Get /Articles
+- Mengambil semua artikel
 
--fitur post gambar POST
-image
+Get /Articles/{id}
+- mengambil sebuah artikel berdasarkan id nya
+- id merupakan id dari sebuah artikel
 
--fitur artikel GET
-id
-imageUrl
-Title 
-description 
-CreatedAt 
-UpdateAt
+Put /Articles/{id}
+- Merubah Isi artikel
+- Dikrim melalui header multipart/form-data
+- id merupakan id dari sebuah article
+- Body Payload : imageUrl(file), title(text), description(text)
 
--fitur Detail artikel GET
-id
-imageUrl
-Title 
-description 
-CreatedAt 
-UpdateAt
+Delete /Articles/{id}
+- Menghapus sebuah artikel
+- id merupakan id dari sebuah artikel
+
+
 
