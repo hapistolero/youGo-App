@@ -97,8 +97,21 @@ const getUserProfileById =async (userId,pool)=>{
 
   const [users] = await pool.db.runQuery(query)
 
- 
-  return users
+  const formattedProfile = users.map((user)=>({
+    id:user.id,
+    email:user.email,
+    profile:{
+      id:user.profile.id,
+      firstName:user.profile.firstName,
+      lastName:user.profile.lastName,
+      imageUrl:user.profile.imageUrl,
+      age:Number(user.profile.age),
+      weight:Number(user.profile.weight),
+      height:Number(user.profile.height),
+      
+    }
+  }))
+  return formattedProfile[0]
 }
 module.exports = {
   getUserById,

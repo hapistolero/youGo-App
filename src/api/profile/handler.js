@@ -13,7 +13,7 @@ class ProfileHandler{
 
   async postProfileData(request,h){
     const {id,
-      file,
+      imageUrl,
       firstName,
       lastName,
       email,
@@ -22,7 +22,7 @@ class ProfileHandler{
       height } = request.payload
     const {id:credentialId} = request.auth.credentials
     
-    if(!id||!file||!firstName||!lastName||!email||!age||!weight||!height){
+    if(!id||!imageUrl||!firstName||!lastName||!email||!age||!weight||!height){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
@@ -48,8 +48,7 @@ class ProfileHandler{
       return response
     }
 
-    const url = await this._gcpBucket.uploadImagToBucket('profile',file)
-    
+    const url = await this._gcpBucket.uploadImagToBucket('profile',imageUrl)
     const userData = await getUserById(credentialId,this._pool)
     const updatedUserData={
       ...userData,
@@ -58,9 +57,9 @@ class ProfileHandler{
         imageUrl: url,
         firstName,
         lastName,
-        age,
-        weight,
-        height,
+        age:Number(age),
+        weight:Number(weight),
+        height:Number(height),
       },
     }
 
@@ -105,16 +104,16 @@ class ProfileHandler{
   async updatedUserProfileById (request, h){
 
     const {id,
-      file,
+      imageUrl,
       firstName,
       lastName,
-      email,
       age,
+      email,
       weight,
       height } = request.payload
     const {id:credentialId} = request.auth.credentials
     
-    if(!id||!file||!firstName||!lastName||!email||!age||!weight||!height){
+    if(!id||!imageUrl||!firstName||!lastName||!email||!age||!weight||!height){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
@@ -145,15 +144,14 @@ class ProfileHandler{
     
     let url = ''
     const userData = await getUserById(credentialId,this._pool)
-    if(userData.imageUrl){
+    if(userData.profile.imageUrl !==''){
       await this._gcpBucket.deleteFileFromBucket(userData?.profile.imageUrl)
-      
     }
     
-    if (file && file instanceof Buffer && file.length > 0) {
-      url = await this._gcpBucket.uploadImagToBucket('profile',file)
-    }   
-   
+    if (imageUrl.hapi.filename !== '') {
+      url = await this._gcpBucket.uploadImagToBucket('profile', imageUrl) 
+    }
+    
     const updatedUserData={
       ...userData,
       profile: {
@@ -167,13 +165,13 @@ class ProfileHandler{
       },
     }
 
-    const data = await UpdateUserById(updatedUserData,this._pool)
+    await UpdateUserById(updatedUserData,this._pool)
 
     const response = h.response({
       status:'success',
-      message:data
+      message:updatedUserData
     })
-    response.code(400)
+    response.code(200)
     return response
   }
 }

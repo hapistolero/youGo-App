@@ -37,6 +37,18 @@ class PosesHandler {
         response.code(400)
         return response
       }
+
+      const foundedArticle = await getPoseById(id,this._pool)
+      if(foundedArticle){
+        const response = h.response({
+          status:"fail",
+          message:"artikel id is exist"
+        })
+        
+     
+        response.code(400)
+        return response
+      }
       const url = await this._gcpBucket.uploadImagToBucket('poses',imageUrl)
 
       const poseDetails = {
@@ -46,8 +58,8 @@ class PosesHandler {
         category,
         step,
         time,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
+        createdAt:new Date(Date.now()).toLocaleString(),
+        updatedAt:new Date(Date.now()).toLocaleString(),
       }
 
       const res = await postPose(poseDetails, pool)
@@ -177,8 +189,8 @@ class PosesHandler {
       category:category,
       step:step,
       time:time,
-      createdAt:foundedPose.createdAt,
-      updatedAt: Date.now().toLocaleString()
+      createdAt:new Date(foundedPose.createdAt).toLocaleString(),
+      updatedAt: new Date(Date.now().toLocaleString()).toLocaleString()
     }
 
     await UpdatePoseById(updatedPose,this._pool)

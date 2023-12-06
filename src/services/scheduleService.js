@@ -67,11 +67,27 @@ async function getUserScheduleById(scheduleId,pool){
   if (!schedule || !schedule.length) {
     throw new Error('schedule not found')
   }
+  const formattedSchedule = schedule.map((sched) => ({
+    scheduleId: sched.scheduleId,
+    userId: sched.userId,
+    scheduleName: sched.scheduleName,
+    dayTime: sched.dayTime,
+    createdAt: new Date(sched.createdAt).toLocaleString(),
+    updateAt: new Date(sched.updateAt).toLocaleString(),
+    schedule: sched.schedule.map((item) => ({
+      id: item.id,
+      title: item.title,
+      category: item.category,
+      time: item.time,
+      step: item.step,
+      imageUrl: item.imageUrl,
+    })),
+  }))
       
       
         
       
-  return schedule[0]
+  return formattedSchedule[0]
 } 
 const postSchedule = async (article,pool)=>{
   try {
@@ -103,15 +119,25 @@ const getUserAllSchedule =async (userId,pool)=>{
   
   const [schedule] = await pool.db.runQuery(query)
   
-   
+  const formattedSchedule = schedule.map((sched) => ({
+    scheduleId: sched.scheduleId,
+    userId: sched.userId,
+    scheduleName: sched.scheduleName,
+    dayTime: sched.dayTime,
+    createdAt: new Date(sched.createdAt).toLocaleString(),
+    updateAt: new Date(sched.updateAt).toLocaleString(),
+    schedule: sched.schedule.map((item) => ({
+      id: item.id,
+      title: item.title,
+      category: item.category,
+      time: item.time,
+      step: item.step,
+      imageUrl: item.imageUrl,
+    })),
+  }))
   
-  // const formattedArticle = articles.map((article)=>({
-  //   id: article.id,
-  //   title: article.title,
-  //   description: article.description,
-  // }))
   
-  return schedule
+  return formattedSchedule
 }
 
 async function UpdateScheduleById(ScheduleData, pool) {

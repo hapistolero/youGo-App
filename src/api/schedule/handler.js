@@ -36,7 +36,8 @@ class ScheduleHandler {
         response.code(400)
         return response
       }
-  
+
+    
       const validPoses = []
       for (const id of poseId) {
         // Validate each poseId
@@ -251,14 +252,13 @@ class ScheduleHandler {
   
     // Continue with the rest of your code...
     // ...
-  
     const newSchedule = {
       scheduleId:scheduleId,
       userId: credentialId,
       scheduleName,
       dayTime,
-      createdAt: foundedSchedule.createdAt,
-      updateAt: Date.now().toLocaleString(),
+      createdAt: new Date(Date(foundedSchedule.createdAt)).toLocaleString(),
+      updateAt:new Date(Date.now()).toLocaleString(),
       schedule: validPoses, // Assign the array of pose data
     }
 

@@ -71,7 +71,7 @@ const getAllPoses = async (pool)=>{
     imageUrl: pose.imageUrl,
     category: pose.category,
     step: pose.step,
-    time: pose.time,
+    time:Number(pose.time),
   }))
 
   return formattedPose
@@ -84,13 +84,23 @@ async function getPoseById (poseId, pool) {
     .filter('id', '=', poseId)
 
   const [pose] = await pool.db.runQuery(query)
-
-
+  
+ 
   if (!pose) {
     throw new Error('Pose not found')
   }
 
-  return pose[0]
+  const formattedPose = pose.map((pose)=>({
+    id: pose.id,
+    title: pose.title,
+    imageUrl: pose.imageUrl,
+    category: pose.category,
+    step: pose.step,
+    time:Number(pose.time),
+  }))
+
+
+  return formattedPose
 }
 
 async function UpdatePoseById(PoseData, pool) {

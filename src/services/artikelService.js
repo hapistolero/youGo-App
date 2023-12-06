@@ -45,7 +45,19 @@ const postArtikel = async (article)=>{
   
     try {
       await pool.db.save(entity)
-      return entity.data
+      const formattedArticle = [entity.data].map((article)=>({
+        id:article.id,
+        title:article.title,
+        description:article.description,
+        imageUrl:article.imageUrl,
+        updateAt:new Date(article.updateAt).toLocaleString(),
+        createdAt :new Date(article.createdAt).toLocaleString(),
+
+      })
+
+      )
+      
+      return formattedArticle
     } catch (err) {
       throw new Error(err.message)
     }
@@ -66,13 +78,19 @@ const getAllArticles =async (pool)=>{
 
  
 
-  // const formattedArticle = articles.map((article)=>({
-  //   id: article.id,
-  //   title: article.title,
-  //   description: article.description,
-  // }))
+  const formattedArticle = articles.map((article)=>({
+    id:article.id,
+    title:article.title,
+    description:article.description,
+    imageUrl:article.imageUrl,
+    updateAt:new Date(article.updateAt).toLocaleString(),
+    createdAt :new Date(article.createdAt).toLocaleString(),
 
-  return articles
+  })
+
+  )
+
+  return formattedArticle
 }
 
 async function getArticleById(articleId,pool) {
@@ -82,16 +100,27 @@ async function getArticleById(articleId,pool) {
     .filter('id', '=', articleId)
 
   const [article] = await pool.db.runQuery(query)
-
+ 
+ 
       
   if (!article) {
     throw new Error('Article not found')
   }
+
+  const formattedArticle = article.map((article)=>({
+    id:article.id,
+    title:article.title,
+    description:article.description,
+    imageUrl:article.imageUrl,
+    updateAt:new Date(article.updateAt).toLocaleString(),
+    createdAt :new Date(article.createdAt).toLocaleString(),
+
+  }))
       
       
         
       
-  return article[0]
+  return formattedArticle
 }
 
 async function UpdateArticleById(ArticleData, pool) {

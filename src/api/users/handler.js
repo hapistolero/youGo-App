@@ -34,6 +34,30 @@ class UsersHandler {
 
       }
 
+     
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+       
+
+      
+      if (!emailRegex.test(email) ) {
+        const response = h.response({
+          status: 'fail',
+          message: 'email is not valid'
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      } 
+
+      if (password.length < 6 ) {
+        const response = h.response({
+          status: 'fail',
+          message: 'password must be more than 6 character'
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      } 
       await verifyAvailableUsername(email,pool)
       const hashedPassword = await bcrypt.hash(password, 10)
 

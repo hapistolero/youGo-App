@@ -36,14 +36,28 @@ class ArtikelHandler {
         response.code(400)
         return response
       }
+
+      const foundedArticle = await getArticleById(id,this._pool)
+      if(foundedArticle){
+        const response = h.response({
+          status:"fail",
+          message:"artikel id is exist"
+        })
+        
+     
+        response.code(400)
+        return response
+      }
+
+
       const url = await this._gcpBucket.uploadImagToBucket('articles',imageUrl)
       // Now you can save the article details to Firestore or perform other actions
       const articleDetails = {
         id,
         title,
         description,
-        createdAt:Date.now().toLocaleString(),
-        updateAt:Date.now().toLocaleString(),
+        createdAt:Date.now(),
+        updateAt:Date.now(),
         imageUrl: url, // Example URL to access the uploaded image
       }
 
@@ -208,21 +222,20 @@ class ArtikelHandler {
       return response
     }   
     const url = await this._gcpBucket.uploadImagToBucket('articles',imageUrl)
-
     const updatedArticle={
-      id:article.id,
-      createdAt:article.createdAt,
+      id,
       imageUrl:url,
       title,
       description,
-      updateAt: Date.now().toLocaleString()
+      updateAt: new Date(Date.now()).toLocaleString(),
+      createdAt:article[0].createdAt,
     }
 
-    const data = await UpdateArticleById(updatedArticle,this._pool)
-
+    await UpdateArticleById(updatedArticle,this._pool)
+    
     const response = h.response({
       status:'success',
-      message:data
+      message:updatedArticle
     })
     response.code(400)
     return response
