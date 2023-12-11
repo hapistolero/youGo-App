@@ -52,9 +52,11 @@ class UsersHandler {
 
       const response = h.response({
         status: 'success',
-        userId:id,
-        accessToken,
-        refreshToken,
+        loginResult:{
+          userId:id,
+          accessToken,
+          refreshToken,
+        }
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -96,7 +98,8 @@ class UsersHandler {
 
       const response = h.response({
         status: 'success',
-        accessToken: newAccessToken,
+        loginResult:{
+          accessToken: newAccessToken,}
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)

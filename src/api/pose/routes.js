@@ -27,6 +27,22 @@ const routes = (handler) => [
     handler: (request, h) => handler.getPoseByIdHandler(request, h),
   },
   {
+    method: "POST",
+    path: "/checkMyPose/{id}",
+    handler: (request, h) => handler.postCheckMyPoseByIdHandler(request, h),
+    options:{
+      auth:false, // false by default
+      payload: {
+        parse: true,
+        multipart: {
+          output: 'stream'
+        },
+        maxBytes: 1000 * 1000 * 5, // 5 Mb
+      }
+    }, 
+  },
+
+  {
     method: "DELETE",
     path: "/poses/{id}",
     handler: (request, h) => handler.deletePoseByIdHandler(request, h),

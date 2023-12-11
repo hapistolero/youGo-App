@@ -1,6 +1,8 @@
 const { pool } = require("../../infrastructures/firestore")
 const GcpBucket = require('../../infrastructures/gcpBucket')
+const PredictionPythonService = require('../../services/predictionPythonService')
 const { postPose, getAllPoses, getPoseById, UpdatePoseById, deletePoseById } = require("../../services/poseService")
+
 
 class PosesHandler {
   constructor() {
@@ -9,6 +11,8 @@ class PosesHandler {
     this.getPoseByIdHandler = this.getPoseByIdHandler.bind(this)
     this.updatePoseHandler = this.updatePoseHandler.bind(this)
     this.deletePoseByIdHandler = this.deletePoseByIdHandler.bind(this)
+    this.postCheckMyPoseByIdHandler = this.postCheckMyPoseByIdHandler.bind(this)
+    this._predictionPythonService =new PredictionPythonService()
     this._pool = pool
     this._gcpBucket = new GcpBucket()
   }
@@ -238,7 +242,46 @@ class PosesHandler {
     }
   }
 
+  
 
+
+  async  postCheckMyPoseByIdHandler(request, h) {
+    try {
+      const { id } = request.params
+      const { image } = request.payload // Assuming the image is sent as part of the payload
+
+      if (!image) {
+        const response = h.response({
+          status: "fail",
+          message: "not sending specific input",
+        })
+        response.code(400)
+        return response
+      }
+
+      const {predictedClassLabel,confidence} = await this._predictionPythonService.makePosePrediction(id,image)
+
+      // Return the result in the response
+      const response = h.response({
+        status: "success",
+        data:{
+          yoga_pose:predictedClassLabel,
+          confidence
+        }
+      })
+      response.code(200)
+      return response
+    } catch (error) {
+      console.error(error)
+
+      const response = h.response({
+        status: "fail",
+        message: "server error",
+      })
+      response.code(500)
+      return response
+    }
+  }
 }
 
 module.exports = PosesHandler
