@@ -1,5 +1,6 @@
 
 const { getUserById,UpdateUserById,getUserProfileById,pool} = require('../../services/profileServices')
+const getUserBmi = require('../../services/bmiService')
 const GcpBucket = require('../../infrastructures/gcpBucket')
 
 class ProfileHandler{
@@ -50,6 +51,7 @@ class ProfileHandler{
 
     const url = await this._gcpBucket.uploadImagToBucket('profile',imageUrl)
     const userData = await getUserById(credentialId,this._pool)
+    const {bmi,status,idealWeight} = getUserBmi(height,weight)
     const updatedUserData={
       ...userData,
       profile: {
@@ -60,6 +62,9 @@ class ProfileHandler{
         age:Number(age),
         weight:Number(weight),
         height:Number(height),
+        bmi:bmi,
+        status:status,
+        idealWeightRange:idealWeight
       },
     }
 
@@ -67,7 +72,7 @@ class ProfileHandler{
 
     const response = h.response({
       status:'success',
-      message:data
+      userProfile:data
     })
     response.code(400)
     return response
@@ -84,7 +89,7 @@ class ProfileHandler{
       const users = await getUserProfileById(userCredentialId,pool)
       const response = h.response({
         status: 'success',
-        data:users,
+        userProfile:users,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -152,6 +157,7 @@ class ProfileHandler{
       url = await this._gcpBucket.uploadImagToBucket('profile', imageUrl) 
     }
     
+    const {bmi,status,idealWeight} = getUserBmi(height,weight)
     const updatedUserData={
       ...userData,
       profile: {
@@ -162,14 +168,33 @@ class ProfileHandler{
         age,
         weight,
         height,
+        bmi:bmi,
+        status,
+        idealWeightRange:idealWeight
       },
     }
 
     await UpdateUserById(updatedUserData,this._pool)
 
+    const responseUpdateUser ={
+      id:userData.id,
+      email:userData.email,
+      profile: {
+        id,
+        imageUrl: url,
+        firstName,
+        lastName,
+        age,
+        weight,
+        height,
+        bmi:bmi,
+        status,
+        idealWeightRange:idealWeight
+      },
+    }
     const response = h.response({
       status:'success',
-      message:updatedUserData
+      updatedUserProfile:responseUpdateUser
     })
     response.code(200)
     return response

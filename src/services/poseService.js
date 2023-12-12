@@ -100,7 +100,7 @@ async function getPoseById (poseId, pool) {
   }))
 
 
-  return formattedPose
+  return formattedPose[0]
 }
 
 async function UpdatePoseById(PoseData, pool) {

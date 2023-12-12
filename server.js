@@ -9,6 +9,7 @@ const artikel = require('./src/api/artikel')
 const profile = require('./src/api/profile')
 const pose = require('./src/api/pose')
 const schedule = require('./src/api/schedule')
+const yogaPlace = require('./src/api/yogaPlaceRecomendation')
 const Hapi = require('@hapi/hapi')
 
 const Jwt = require('@hapi/jwt')
@@ -96,7 +97,11 @@ const init = async () => {
   },
   {
     plugin:schedule
-  }])
+  },
+  {
+    plugin:yogaPlace
+  }
+  ])
 
 
   // server.ext('onPreResponse', (request, h) => {

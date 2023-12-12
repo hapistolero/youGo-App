@@ -65,7 +65,7 @@ class ArtikelHandler {
 
       const response = h.response({
         status: 'success',
-        data:res,
+        artikel:res,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -88,7 +88,7 @@ class ArtikelHandler {
       const article = await getAllArticles(pool)
       const response = h.response({
         status: 'success',
-        data:article,
+        artikel:article,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -123,7 +123,7 @@ class ArtikelHandler {
     
       const successResponse = h.response({
         status: 'success',
-        data: article,
+        artikel: article,
       })
       successResponse.header('Access-Control-Allow-Origin', '*')
       successResponse.code(200)
@@ -158,7 +158,7 @@ class ArtikelHandler {
       }
       const successResponse = h.response({
         status: 'success',
-        data: articleIsDeleted,
+        artikel: articleIsDeleted,
       })
       successResponse.header('Access-Control-Allow-Origin', '*')
       successResponse.code(200)
@@ -235,7 +235,7 @@ class ArtikelHandler {
     
     const response = h.response({
       status:'success',
-      message:updatedArticle
+      artikel:updatedArticle
     })
     response.code(400)
     return response

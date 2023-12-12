@@ -108,7 +108,9 @@ const getUserProfileById =async (userId,pool)=>{
       age:Number(user.profile.age),
       weight:Number(user.profile.weight),
       height:Number(user.profile.height),
-      
+      bmi:Number(user.profile.bmi),
+      status:user.profile.status,
+      idealWeightRange:user.profile.idealWeightRange
     }
   }))
   return formattedProfile[0]

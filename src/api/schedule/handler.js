@@ -83,7 +83,7 @@ class ScheduleHandler {
 
       const response = h.response({
         status: 'success',
-        data:res,
+        schedule:res,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -106,7 +106,7 @@ class ScheduleHandler {
       const schedule = await getUserAllSchedule(userId,this._pool)
       const response = h.response({
         status: 'success',
-        data:schedule,
+        schedule:schedule,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -129,7 +129,7 @@ class ScheduleHandler {
       const schedule = await getUserScheduleById(id,this._pool)
       const response = h.response({
         status: 'success',
-        data:schedule,
+        schedule:schedule,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -167,7 +167,7 @@ class ScheduleHandler {
       const schedule = await deleteSchedule(id,this._pool)
       const response = h.response({
         status: 'success',
-        data:schedule,
+        schedule:schedule,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -267,7 +267,7 @@ class ScheduleHandler {
 
     const response = h.response({
       status:'success',
-      message:newSchedule
+      newSchedule:newSchedule
     })
     response.code(400)
     return response

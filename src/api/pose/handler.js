@@ -70,7 +70,7 @@ class PosesHandler {
 
       const response = h.response({
         status: 'success',
-        data: res,
+        pose: res,
       })
       response.header('Access-Control-ALlow-Origin', '*')
       response.code(200)
@@ -91,7 +91,7 @@ class PosesHandler {
       const pose = await getAllPoses(pool)
       const response = h.response({
         status: 'success',
-        data: pose,
+        pose: pose,
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)
@@ -125,7 +125,7 @@ class PosesHandler {
 
       const successResponse = h.response({
         status: 'success',
-        data: pose,
+        pose: pose,
       })
       successResponse.header('Access-Control-Allow-Origin', '*')
       successResponse.code(200)
@@ -201,7 +201,7 @@ class PosesHandler {
 
     const response = h.response({
       status:'success',
-      message:updatedPose
+      pose:updatedPose
     })
     response.code(400)
     return response
@@ -226,7 +226,7 @@ class PosesHandler {
 
       const successResponse = h.response({
         status: 'success',
-        data: pose,
+        pose: pose,
       })
       successResponse.header('Access-Control-Allow-Origin', '*')
       successResponse.code(200)
@@ -250,6 +250,17 @@ class PosesHandler {
       const { id } = request.params
       const { image } = request.payload // Assuming the image is sent as part of the payload
 
+      const pose = await getPoseById(id,pool)
+     
+      if (!pose) {
+        const response = h.response({
+          status: "fail",
+          message: "pose is not found",
+        })
+        response.code(400)
+        return response
+      }
+
       if (!image) {
         const response = h.response({
           status: "fail",
@@ -259,19 +270,25 @@ class PosesHandler {
         return response
       }
 
+      const poseName = pose.title
+
+
+
       const {predictedClassLabel,confidence} = await this._predictionPythonService.makePosePrediction(id,image)
 
       // Return the result in the response
       const response = h.response({
         status: "success",
-        data:{
+        pose:{
           yoga_pose:predictedClassLabel,
+          isCorrectPose:poseName === predictedClassLabel ? true : false,
           confidence
         }
       })
       response.code(200)
       return response
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error)
 
       const response = h.response({

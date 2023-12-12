@@ -70,7 +70,7 @@ class UsersHandler {
     
       const response = h.response({
         status: 'success',
-        message: res
+        user: res
       })
       response.header('Access-Control-Allow-Origin', '*')
       response.code(200)

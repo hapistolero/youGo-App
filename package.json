@@ -17,6 +17,7 @@
     "@hapi/hapi": "^20.1.5",
     "@hapi/inert": "^7.1.0",
     "@hapi/jwt": "^2.0.1",
+    "axios": "^1.6.2",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "firebase": "^10.7.0",
