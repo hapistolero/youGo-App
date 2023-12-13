@@ -15,9 +15,9 @@ class ArtikelHandler {
 
   async postArtikelHandler(request, h) {
     try {
-      const { id, title, description, imageUrl } = request.payload
+      const { id, title, description, imageUrl, webUrl } = request.payload
 
-      if (!id || !title || !description  || !imageUrl) {
+      if (!id || !title || !description  || !imageUrl || !webUrl) {
         const response = h.response({
           status: 'fail',
           message: 'Not sending specific input',
@@ -27,7 +27,7 @@ class ArtikelHandler {
         return response
       }
 
-      if (typeof id !== "string" || typeof title !== "string" || typeof description !== "string") {
+      if (typeof id !== "string" || typeof title !== "string" || typeof description !== "string" || typeof webUrl !== 'string') {
         const response = h.response({
           status: 'fail',
           message: 'Input does not meet specific datatypes',
@@ -59,6 +59,7 @@ class ArtikelHandler {
         createdAt:Date.now(),
         updateAt:Date.now(),
         imageUrl: url, // Example URL to access the uploaded image
+        webUrl
       }
 
       const res = await postArtikel(articleDetails, pool)
@@ -180,12 +181,13 @@ class ArtikelHandler {
     const {
       imageUrl,
       title ,
-      description
+      description,
+      webUrl
     } = request.payload
 
     const {id} = request.params
     
-    if(!id||!imageUrl||!title||!description){
+    if(!id||!imageUrl||!title||!description||webUrl){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
@@ -197,7 +199,8 @@ class ArtikelHandler {
     if(
       typeof id !=='string'||
         typeof title !=='string' ||
-        typeof description !=='string'
+        typeof description !=='string'||
+        typeof webUrl !=='string'
     ){
       const response = h.response({
         status:'fail',
@@ -227,6 +230,7 @@ class ArtikelHandler {
       imageUrl:url,
       title,
       description,
+      webUrl,
       updateAt: new Date(Date.now()).toLocaleString(),
       createdAt:article[0].createdAt,
     }

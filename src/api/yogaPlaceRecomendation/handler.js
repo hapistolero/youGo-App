@@ -25,7 +25,7 @@ class YogaPlaceRecommendationHandler {
         return response
       }
       const placeRecomendation = await getNearbyYogaPlaces(lattitude,longitude)
-      console.log(placeRecomendation[0].photos)
+      
 
       const response = h.response({
         status:'success',

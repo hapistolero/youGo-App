@@ -50,6 +50,7 @@ const postArtikel = async (article)=>{
         title:article.title,
         description:article.description,
         imageUrl:article.imageUrl,
+        webUrl:article.webUrl,
         updateAt:new Date(article.updateAt).toLocaleString(),
         createdAt :new Date(article.createdAt).toLocaleString(),
 
@@ -83,6 +84,7 @@ const getAllArticles =async (pool)=>{
     title:article.title,
     description:article.description,
     imageUrl:article.imageUrl,
+    webUrl:article.webUrl,
     updateAt:new Date(article.updateAt).toLocaleString(),
     createdAt :new Date(article.createdAt).toLocaleString(),
 
@@ -112,6 +114,7 @@ async function getArticleById(articleId,pool) {
     title:article.title,
     description:article.description,
     imageUrl:article.imageUrl,
+    webUrl:article.webUrl,
     updateAt:new Date(article.updateAt).toLocaleString(),
     createdAt :new Date(article.createdAt).toLocaleString(),
 
