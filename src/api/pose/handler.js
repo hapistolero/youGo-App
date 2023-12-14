@@ -2,6 +2,7 @@ const { pool } = require("../../infrastructures/firestore")
 const GcpBucket = require('../../infrastructures/gcpBucket')
 const PredictionPythonService = require('../../services/predictionPythonService')
 const { postPose, getAllPoses, getPoseById, UpdatePoseById, deletePoseById } = require("../../services/poseService")
+const {areYouAdmin} = require('../../services/adminService')
 
 
 class PosesHandler {
@@ -20,7 +21,17 @@ class PosesHandler {
   async postPoseHandler (request, h) {
     try {
       const {id, title, imageUrl, category, step, time} = request.payload
-
+      const {id:adminCredentials} = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials,pool)
+      if(isAdmin){
+        const response = h.response({
+          status: 'fail',
+          message: 'you are not admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
       if (!id || !title || !imageUrl || !category || !step || !time) {
         const response = h.response({
           status: 'fail', 
@@ -147,7 +158,18 @@ class PosesHandler {
     } = request.payload
 
     const {id} = request.params
-    
+
+    const {id:adminCredentials} = request.auth.credentials
+    const isAdmin = await areYouAdmin(adminCredentials,pool)
+    if(isAdmin){
+      const response = h.response({
+        status: 'fail',
+        message: 'you are not admin',
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(400)
+      return response
+    }
     if(!id||!imageUrl||!category||!step||!time){
       const response = h.response({
         status:'fail',
@@ -210,6 +232,17 @@ class PosesHandler {
   async deletePoseByIdHandler(request,h){
     try {
       const { id } = request.params
+      const {id:adminCredentials} = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials,pool)
+      if(isAdmin){
+        const response = h.response({
+          status: 'fail',
+          message: 'you are not admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
       const foundedPose = await getPoseById(id,this._pool)
       await this._gcpBucket.deleteFileFromBucket(foundedPose.imageUrl)
       const pose = await deletePoseById(id, pool)

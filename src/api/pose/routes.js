@@ -4,7 +4,7 @@ const routes = (handler) => [
     path: "/poses",
     handler: (request, h) => handler.postPoseHandler(request, h),
     options:{
-      auth:false, // false by default
+      auth:'yoga_app_jwt', // false by default
       payload: {
         parse: true,
         multipart: {
@@ -31,7 +31,7 @@ const routes = (handler) => [
     path: "/checkMyPose/{id}",
     handler: (request, h) => handler.postCheckMyPoseByIdHandler(request, h),
     options:{
-      auth:false, // false by default
+      auth:'yoga_app_jwt', // false by default
       payload: {
         parse: true,
         multipart: {
@@ -46,13 +46,17 @@ const routes = (handler) => [
     method: "DELETE",
     path: "/poses/{id}",
     handler: (request, h) => handler.deletePoseByIdHandler(request, h),
+    options:{
+      auth:'yoga_app_jwt',
+     
+    }
   },
   {
     method: "PUT",
     path: "/poses/{id}",
     handler: (request, h) => handler.updatePoseHandler(request, h),
     options:{
-      auth:false, // false by default
+      auth:'yoga_app_jwt', // false by default
       payload: {
         parse: true,
         multipart: {

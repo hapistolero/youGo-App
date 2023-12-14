@@ -10,7 +10,7 @@ class PredictionPythonService {
 
   async makePosePrediction(id,image){
     // Save the image to a local folder
-    const imageFileName = `${id}.png`
+    const imageFileName = `${Math.random()}.png`
     const imagePath = path.join(__dirname, '../local', imageFileName) // Adjust the folder structure as needed
     await fs.writeFile(imagePath, image)
 
@@ -25,7 +25,7 @@ class PredictionPythonService {
     const outputLines = stdout.trim().split('\n')
 
     // Extract predicted class label and confidence
-    const predictedClassLabel = outputLines[2]
+    const predictedClassLabel = outputLines[2].slice(0,-1)
     const confidence = parseFloat(outputLines[3]) * 100
 
     

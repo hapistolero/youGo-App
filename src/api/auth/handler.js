@@ -1,4 +1,5 @@
 const { getPasswordByUsername, getIdByUsername,pool } = require('../../services/usersService')
+const { getAdminPasswordByUsername, getIdAdminByUsername} = require('../../services/adminService')
 const {addToken,
   checkAvailableToken,
   deleteToken} = require('../../services/authService')
@@ -9,7 +10,70 @@ class UsersHandler {
     this.tokenManager = new TokenManager()
     this.loginHandler = this.loginHandler.bind(this)
     this.logoutHandler = this.logoutHandler.bind(this)
+    this.loginAdminHandler = this.loginAdminHandler.bind(this)
   }
+
+  async loginAdminHandler(request, h) {
+    try {
+      const { email, password } = request.payload
+
+      if (!email || !password) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Not sending specific input',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+
+      if (typeof email !== 'string' || typeof password !== 'string') {
+        const response = h.response({
+          status: 'fail',
+          message: 'Input does not meet specific datatypes',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+
+      const hashedPassword = await getAdminPasswordByUsername(email, pool)
+      
+      const passwordMatch = await bcrypt.compare(password, hashedPassword)
+
+      if (!passwordMatch) {
+        throw new Error('Invalid email or password')
+      }
+
+     
+      const id = await getIdAdminByUsername(email,pool)
+     
+      const accessToken = await this.tokenManager.createAccessToken({ id })
+      const refreshToken = await this.tokenManager.createRefreshToken({ id })
+      await addToken(refreshToken,pool)
+
+      const response = h.response({
+        status: 'success',
+        loginResult:{
+          userId:id,
+          accessToken,
+          refreshToken,
+        }
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(200)
+      return response
+    } catch (error) {
+      const response = h.response({
+        status: 'fail',
+        message: error.message,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(200)
+      return response
+    }
+  }
+
 
   async loginHandler(request, h) {
     try {

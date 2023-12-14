@@ -6,14 +6,14 @@ from tensorflow.keras.models import load_model
 
 # Load the trained model
 script_directory = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(script_directory, "yoga model.h5")
+model_path = os.path.join(script_directory, "yoga model6(20).h5")
 
 imported_model = load_model(model_path)
 
 # Preprocess the input image
 def preprocess_image(image_path):
     img = cv2.imread(image_path)
-    img = cv2.resize(img, (256, 256))
+    img = cv2.resize(img, (128, 128))  # Resize to match the model's input shape
     img = img / 255.0  # Normalize pixel values
     img = np.expand_dims(img, axis=0)  # Add batch dimension
     return img
@@ -33,9 +33,8 @@ input_image = preprocess_image(image_path)
 best_model = imported_model  # Update this line with the best model if you have multiple models
 
 predictions = best_model.predict(input_image)
-labels = ['adho mukha svanasana', 'adho mukha vriksasana', 'agnistambhasana', 'ananda balasana', 'anantasana',
-          'anjaneyasana', 'ardha bhekasana', 'ardha chandrasana', 'ardha matsyendrasana', 'ardha pincha mayurasana',
-          'ardha uttanasana', 'ashtanga namaskara', 'astavakrasana']
+labels = ['bow pose', 'camel pose', 'chair pose', 'dancer pose', 'downward dog', 'easy pose', 'half pigeon pose', 'high plank', 'pendant pose', 'plow pose', 'side plank', 'staff pose', 'tree pose','upward dog','warrior 2','warrior 3','wheel pose']
+
 
 # Assuming predictions is a one-hot encoded array
 predicted_class = np.argmax(predictions)

@@ -4,7 +4,7 @@ const routes = (handler) => [
     path: "/articles",
     handler: (request, h) => handler.postArtikelHandler(request, h),
     options:{
-      auth: false, // false by default
+      auth:'yoga_app_jwt', // false by default
       payload: {
         parse: true,
         multipart: {
@@ -30,13 +30,17 @@ const routes = (handler) => [
     method: "DELETE",
     path: "/articles/{id}",
     handler: (request, h) => handler.deleteArticleByIdHandler(request,h),
+    options:{
+      auth:'yoga_app_jwt',
+     
+    }
   },
   {
     method: "PUT",
     path: "/articles/{id}",
     handler: (request, h) => handler.updateArticle(request,h),
     options:{
-      auth: false, // false by default
+      auth:'yoga_app_jwt', // false by default
       payload: {
         parse: true,
         multipart: {

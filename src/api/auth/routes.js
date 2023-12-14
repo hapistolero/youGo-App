@@ -5,6 +5,11 @@ const routes = (handler) => ([
     handler: handler.loginHandler,
   },
   {
+    method: 'POST',
+    path: '/authenticationsAdmin',
+    handler: handler.loginAdminHandler,
+  },
+  {
     method: 'PUT',
     path: '/authentications',
     handler: handler.refreshAuthHandler,

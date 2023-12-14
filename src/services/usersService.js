@@ -86,8 +86,8 @@ const getPasswordByUsername = async(username)=> {
     .filter('email', '=', username)
 
   const [entities] = await pool.db.runQuery(query)
-  if (entities.length < 0) {
-    throw new Error('Username is not available')
+  if (entities.length === 0) {
+    throw new Error('invalid email and password')
   }
 
   return entities[0].password

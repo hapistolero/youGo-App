@@ -1,5 +1,6 @@
 
 const { postArtikel,getAllArticles,getArticleById,UpdateArticleById,pool, deleteArticle } = require("../../services/artikelService")
+const {areYouAdmin} = require('../../services/adminService')
 const GcpBucket = require('../../infrastructures/gcpBucket')
 
 class ArtikelHandler {
@@ -16,7 +17,17 @@ class ArtikelHandler {
   async postArtikelHandler(request, h) {
     try {
       const { id, title, description, imageUrl, webUrl } = request.payload
-
+      const {id:adminCredentials} = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials,pool)
+      if(isAdmin){
+        const response = h.response({
+          status: 'fail',
+          message: 'you are not admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
       if (!id || !title || !description  || !imageUrl || !webUrl) {
         const response = h.response({
           status: 'fail',
@@ -38,7 +49,7 @@ class ArtikelHandler {
       }
 
       const foundedArticle = await getArticleById(id,this._pool)
-      if(foundedArticle){
+      if(foundedArticle.length > 0){
         const response = h.response({
           status:"fail",
           message:"artikel id is exist"
@@ -144,6 +155,17 @@ class ArtikelHandler {
   async deleteArticleByIdHandler(request, h) {
     try {
       const { id } = request.params // Use request.params instead of request.param
+      const {id:adminCredentials} = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials,pool)
+      if(isAdmin){
+        const response = h.response({
+          status: 'fail',
+          message: 'you are not admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
       const foundedArticle =await getArticleById(id,pool)
       this._gcpBucket.deleteFileFromBucket(foundedArticle.imageUrl)
       const articleIsDeleted = await deleteArticle(id, pool)
@@ -186,8 +208,20 @@ class ArtikelHandler {
     } = request.payload
 
     const {id} = request.params
-    
-    if(!id||!imageUrl||!title||!description||webUrl){
+
+    const {id:adminCredentials} = request.auth.credentials
+    const isAdmin = await areYouAdmin(adminCredentials,pool)
+    if(isAdmin){
+      const response = h.response({
+        status: 'fail',
+        message: 'you are not admin',
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(400)
+      return response
+    }
+
+    if(!id||!imageUrl||!title||!description||!webUrl){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
