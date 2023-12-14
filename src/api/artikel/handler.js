@@ -19,7 +19,7 @@ class ArtikelHandler {
       const { id, title, description, imageUrl, webUrl } = request.payload
       const {id:adminCredentials} = request.auth.credentials
       const isAdmin = await areYouAdmin(adminCredentials,pool)
-      if(isAdmin){
+      if(!isAdmin){
         const response = h.response({
           status: 'fail',
           message: 'you are not admin',
@@ -157,7 +157,7 @@ class ArtikelHandler {
       const { id } = request.params // Use request.params instead of request.param
       const {id:adminCredentials} = request.auth.credentials
       const isAdmin = await areYouAdmin(adminCredentials,pool)
-      if(isAdmin){
+      if(!isAdmin){
         const response = h.response({
           status: 'fail',
           message: 'you are not admin',
@@ -211,7 +211,7 @@ class ArtikelHandler {
 
     const {id:adminCredentials} = request.auth.credentials
     const isAdmin = await areYouAdmin(adminCredentials,pool)
-    if(isAdmin){
+    if(!isAdmin){
       const response = h.response({
         status: 'fail',
         message: 'you are not admin',

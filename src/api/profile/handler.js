@@ -13,69 +13,95 @@ class ProfileHandler{
   }
 
   async postProfileData(request,h){
-    const {id,
-      imageUrl,
-      firstName,
-      lastName,
-      email,
-      age,
-      weight,
-      height } = request.payload
-    const {id:credentialId} = request.auth.credentials
+    try {
+      
     
-    if(!id||!imageUrl||!firstName||!lastName||!email||!age||!weight||!height){
-      const response = h.response({
-        status:'fail',
-        mesage:'input dont have specific property'
-      })
-      response.code(400)
-      return response
-    }
+      const {id,
+        imageUrl,
+        firstName,
+        lastName,
+        age,
+        weight,
+        height } = request.payload
+      const {id:credentialId} = request.auth.credentials
+    
+      if(!id||!imageUrl||!firstName||!lastName||!age||!weight||!height){
+        const response = h.response({
+          status:'fail',
+          mesage:'input dont have specific property'
+        })
+        response.code(400)
+        return response
+      }
 
-    if(
-      typeof id !=='string'||
+      if(
+        typeof id !=='string'||
         typeof firstName !=='string' ||
         typeof lastName !=='string' ||
-        typeof email !=='string' ||
         typeof age !=='string' ||
         typeof weight !== 'string'||
         typeof height !== 'string'
-    ){
+      ){
+        const response = h.response({
+          status:'fail',
+          message:'not meet specific datatypes'
+        })
+        response.code(400)
+        return response
+      }
+
+      const url = await this._gcpBucket.uploadImagToBucket('profile',imageUrl)
+      const userData = await getUserById(credentialId,this._pool)
+      const {bmi,status,idealWeight} = getUserBmi(height,weight)
+      const updatedUserData={
+        ...userData,
+        profile: {
+          id,
+          imageUrl: url,
+          firstName,
+          lastName,
+          age:Number(age),
+          weight:Number(weight),
+          height:Number(height),
+          bmi:bmi,
+          status:status,
+          idealWeightRange:idealWeight
+        },
+      }
+
+      const data = await UpdateUserById(updatedUserData,this._pool)
+      const responseUpdateUser ={
+        id:userData.id,
+        email:userData.email,
+        profile: {
+          id,
+          imageUrl: url,
+          firstName,
+          lastName,
+          age,
+          weight,
+          height,
+          bmi:bmi,
+          status,
+          idealWeightRange:idealWeight
+        },
+      }
+      const response = h.response({
+        status:'success',
+        userProfile:responseUpdateUser
+      })
+      response.code(200)
+      return response
+    } catch (error) {
+      console.log(error.mesage)
       const response = h.response({
         status:'fail',
-        message:'not meet specific datatypes'
+        userProfile:error
       })
-      response.code(400)
+      response.code(500)
       return response
+      
     }
-
-    const url = await this._gcpBucket.uploadImagToBucket('profile',imageUrl)
-    const userData = await getUserById(credentialId,this._pool)
-    const {bmi,status,idealWeight} = getUserBmi(height,weight)
-    const updatedUserData={
-      ...userData,
-      profile: {
-        id,
-        imageUrl: url,
-        firstName,
-        lastName,
-        age:Number(age),
-        weight:Number(weight),
-        height:Number(height),
-        bmi:bmi,
-        status:status,
-        idealWeightRange:idealWeight
-      },
-    }
-
-    const data = await UpdateUserById(updatedUserData,this._pool)
-
-    const response = h.response({
-      status:'success',
-      userProfile:data
-    })
-    response.code(400)
-    return response
 
 
   }
@@ -113,12 +139,12 @@ class ProfileHandler{
       firstName,
       lastName,
       age,
-      email,
+      
       weight,
       height } = request.payload
     const {id:credentialId} = request.auth.credentials
     
-    if(!id||!imageUrl||!firstName||!lastName||!email||!age||!weight||!height){
+    if(!id||!imageUrl||!firstName||!lastName||!age||!weight||!height){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
@@ -131,7 +157,6 @@ class ProfileHandler{
       typeof id !=='string'||
         typeof firstName !=='string' ||
         typeof lastName !=='string' ||
-        typeof email !=='string' ||
         typeof age !=='string' ||
         typeof weight !== 'string'||
         typeof height !== 'string'

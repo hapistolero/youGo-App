@@ -23,7 +23,7 @@ class PosesHandler {
       const {id, title, imageUrl, category, step, time} = request.payload
       const {id:adminCredentials} = request.auth.credentials
       const isAdmin = await areYouAdmin(adminCredentials,pool)
-      if(isAdmin){
+      if(!isAdmin){
         const response = h.response({
           status: 'fail',
           message: 'you are not admin',
@@ -53,11 +53,11 @@ class PosesHandler {
         return response
       }
 
-      const foundedArticle = await getPoseById(id,this._pool)
-      if(foundedArticle){
+      const foundedPose = await getPoseById(id,this._pool)
+      if(foundedPose){
         const response = h.response({
           status:"fail",
-          message:"artikel id is exist"
+          message:"pose id is exist"
         })
         
      
@@ -154,14 +154,14 @@ class PosesHandler {
 
   async updatePoseHandler (request, h){
     const {
-      imageUrl, category, step, time
+      title,imageUrl, category, step, time
     } = request.payload
 
     const {id} = request.params
 
     const {id:adminCredentials} = request.auth.credentials
     const isAdmin = await areYouAdmin(adminCredentials,pool)
-    if(isAdmin){
+    if(!isAdmin){
       const response = h.response({
         status: 'fail',
         message: 'you are not admin',
@@ -170,7 +170,7 @@ class PosesHandler {
       response.code(400)
       return response
     }
-    if(!id||!imageUrl||!category||!step||!time){
+    if(!id||!title||!imageUrl||!category||!step||!time){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
@@ -181,6 +181,7 @@ class PosesHandler {
 
     if(
       typeof id !=='string'||
+      typeof title !=='string'||
         typeof step !=='string' ||
         typeof time !=='string' ||
         typeof category !=='string'
@@ -208,15 +209,15 @@ class PosesHandler {
       return response
     }   
     const url = await this._gcpBucket.uploadImagToBucket('poses',imageUrl)
-
+    console.log(foundedPose)
     const updatedPose={
       id:foundedPose.id,
+      title:title,
       imageUrl:url,
       category:category,
       step:step,
       time:time,
-      createdAt:new Date(foundedPose.createdAt).toLocaleString(),
-      updatedAt: new Date(Date.now().toLocaleString()).toLocaleString()
+      updatedAt: new Date(Date.now()).toLocaleString()
     }
 
     await UpdatePoseById(updatedPose,this._pool)
@@ -234,7 +235,7 @@ class PosesHandler {
       const { id } = request.params
       const {id:adminCredentials} = request.auth.credentials
       const isAdmin = await areYouAdmin(adminCredentials,pool)
-      if(isAdmin){
+      if(!isAdmin){
         const response = h.response({
           status: 'fail',
           message: 'you are not admin',

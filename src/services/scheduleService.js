@@ -12,17 +12,17 @@ const { Datastore } = require('@google-cloud/datastore')
 // TODO: Add SDKs for Firebase products that you want to use
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCyqoNrq92dt3D2Urh_CiDCiBuesKcHYvI',
-  authDomain: 'serene-sentinel-401201.firebaseapp.com',
-  projectId: 'serene-sentinel-401201',
-  storageBucket: 'serene-sentinel-401201.appspot.com',
-  messagingSenderId: '675155939501',
-  appId: '1:675155939501:web:9e52c7afe34a03d54bf624',
-  measurementId: 'G-K92T43HRGL',
+  apiKey: "AIzaSyBClv6sNt9E1d0uKqH3CSMT7ZZznYwL8tM",
+  authDomain: "capstone-404613.firebaseapp.com",
+  projectId: "capstone-404613",
+  storageBucket: "capstone-404613.appspot.com",
+  messagingSenderId: "810640269478",
+  appId: "1:810640269478:web:eb717633f558bb3f535467"
 }
+
   
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig,"Capstone")
   
 const projectId = app.options.projectId
 const keyFilename = 'credentials.json'
@@ -30,6 +30,7 @@ const keyFilename = 'credentials.json'
 const db = new Datastore({
   projectId,
   keyFilename,
+  databaseId: `${process.env.DATABASE_ID}`,
 })
 
 const pool = {

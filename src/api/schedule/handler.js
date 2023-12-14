@@ -74,8 +74,8 @@ class ScheduleHandler {
         userId: credentialId,
         scheduleName,
         dayTime,
-        createdAt: Date.now().toLocaleString(),
-        updateAt: Date.now().toLocaleString(),
+        createdAt:new Date(Date.now()).toLocaleString(),
+        updateAt: new Date(Date.now()).toLocaleString(),
         schedule: validPoses, // Assign the array of pose data
       }
 
