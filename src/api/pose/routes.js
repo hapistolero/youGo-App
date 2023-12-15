@@ -66,6 +66,51 @@ const routes = (handler) => [
       }
     }, 
   },
+  {
+    method: "POST",
+    path: "/poses/{id}/step",
+    handler: (request, h) => handler.addPoseDetail(request, h),
+    options:{
+      auth:'yoga_app_jwt', // false by default
+      payload: {
+        parse: true,
+        multipart: {
+          output: 'stream'
+        },
+        maxBytes: 1000 * 1000 * 5, // 5 Mb
+      }
+    }, 
+  },
+  {
+    method: "PUT",
+    path: "/poses/{poseId}/step/{stepId}",
+    handler: (request, h) => handler.updatePoseDetail(request, h),
+    options:{
+      auth:'yoga_app_jwt', // false by default
+      payload: {
+        parse: true,
+        multipart: {
+          output: 'stream'
+        },
+        maxBytes: 1000 * 1000 * 5, // 5 Mb
+      }
+    }, 
+  },
+  {
+    method: "DELETE",
+    path: "/poses/{poseId}/step/{stepId}",
+    handler: (request, h) => handler.deletePoseDetail(request, h),
+    options:{
+      auth:'yoga_app_jwt', // false by default
+      payload: {
+        parse: true,
+        multipart: {
+          output: 'stream'
+        },
+        maxBytes: 1000 * 1000 * 5, // 5 Mb
+      }
+    }, 
+  },
 ]
 
 module.exports = routes

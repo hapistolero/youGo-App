@@ -2,6 +2,7 @@ const { exec } = require('child_process')
 const { promisify } = require('util')
 const fs = require('fs').promises
 const path = require('path')
+const stream = require('stream')
 
 class PredictionPythonService {
   constructor(){
@@ -10,9 +11,22 @@ class PredictionPythonService {
 
   async makePosePrediction(id,image){
     // Save the image to a local folder
+    let imageData = Buffer.from([])
+    if (image instanceof stream.Readable) {
+      const chunks = []
+      for await (const chunk of image) {
+        chunks.push(chunk)
+      }
+      imageData = Buffer.concat(chunks)
+    } else {
+      // If 'image' is not a stream, handle it accordingly (it might be a string or Buffer already)
+      imageData = Buffer.from(image)
+    }
     const imageFileName = `${Math.random()}.png`
     const imagePath = path.join(__dirname, '../local', imageFileName) // Adjust the folder structure as needed
-    await fs.writeFile(imagePath, image)
+   
+
+    await fs.writeFile(imagePath, imageData)
 
     // Execute the Python script
     const pythonScriptPath = path.join(__dirname, '../model/index.py') // Adjust the path

@@ -71,14 +71,13 @@ const getAllPoses = async (pool)=>{
     title: pose.title,
     imageUrl: pose.imageUrl,
     category: pose.category,
-    step: pose.step,
-    time:Number(pose.time),
   }))
 
   return formattedPose
 }
 
 async function getPoseById (poseId, pool) {
+  
   const kind = 'pose'
   const query = pool.db
     .createQuery(kind)
@@ -96,8 +95,12 @@ async function getPoseById (poseId, pool) {
     title: pose.title,
     imageUrl: pose.imageUrl,
     category: pose.category,
-    step: pose.step,
-    time:Number(pose.time),
+    detail:pose.detail.map(detail =>({
+      stepId:detail.stepId,
+      image:detail.image,
+      step:detail.step,
+      time:Number(detail.time)
+    }))
   }))
 
 

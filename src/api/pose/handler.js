@@ -13,6 +13,9 @@ class PosesHandler {
     this.updatePoseHandler = this.updatePoseHandler.bind(this)
     this.deletePoseByIdHandler = this.deletePoseByIdHandler.bind(this)
     this.postCheckMyPoseByIdHandler = this.postCheckMyPoseByIdHandler.bind(this)
+    this.addPoseDetail = this.addPoseDetail.bind(this)
+    this.updatePoseDetail = this.updatePoseDetail.bind(this)
+    this.deletePoseDetail = this.deletePoseDetail.bind(this)
     this._predictionPythonService =new PredictionPythonService()
     this._pool = pool
     this._gcpBucket = new GcpBucket()
@@ -20,7 +23,7 @@ class PosesHandler {
 
   async postPoseHandler (request, h) {
     try {
-      const {id, title, imageUrl, category, step, time} = request.payload
+      const {id, title, imageUrl, category} = request.payload
       const {id:adminCredentials} = request.auth.credentials
       const isAdmin = await areYouAdmin(adminCredentials,pool)
       if(!isAdmin){
@@ -32,7 +35,7 @@ class PosesHandler {
         response.code(400)
         return response
       }
-      if (!id || !title || !imageUrl || !category || !step || !time) {
+      if (!id || !title || !imageUrl || !category ) {
         const response = h.response({
           status: 'fail', 
           message: 'Not sending specific input',
@@ -43,7 +46,7 @@ class PosesHandler {
       }
       //id using integer/number
       //gimana upload imageurlnyaa?
-      if (typeof id !== "string" || typeof title !== "string" || typeof category !== "string" || typeof step !== "string" || typeof time !== "string") {
+      if (typeof id !== "string" || typeof title !== "string" || typeof category !== "string" ) {
         const response = h.response({
           status: 'fail',
           message: 'Input does not meet specific datatypes',
@@ -52,6 +55,9 @@ class PosesHandler {
         response.code(400)
         return response
       }
+
+
+
 
       const foundedPose = await getPoseById(id,this._pool)
       if(foundedPose){
@@ -71,10 +77,9 @@ class PosesHandler {
         title,
         imageUrl: url,
         category,
-        step,
-        time,
         createdAt:new Date(Date.now()).toLocaleString(),
         updatedAt:new Date(Date.now()).toLocaleString(),
+        detail:[]
       }
 
       const res = await postPose(poseDetails, pool)
@@ -96,6 +101,297 @@ class PosesHandler {
       return response
     }
   }
+
+
+
+  async addPoseDetail(request, h) {
+    try {
+      const { step, time, image } = request.payload
+      const { id } = request.params
+      const { id: adminCredentials } = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials, pool)
+  
+      if (!isAdmin) {
+        const response = h.response({
+          status: 'fail',
+          message: 'You are not an admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      if (!id || !time || !image) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Not sending specific input',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      if (typeof id !== 'string' || typeof step !== 'string' || typeof time !== 'string') {
+        const response = h.response({
+          status: 'fail',
+          message: 'Input does not meet specific datatypes',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      const foundedPose = await getPoseById(id, this._pool)
+  
+      if (!foundedPose) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Pose is not found',
+        })
+        response.code(400)
+        return response
+      }
+  
+      const url = await this._gcpBucket.uploadImagToBucket('step', image)
+  
+      let detail = {
+        stepId: `step-${Math.random()}`,
+        step,
+        time,
+        image: url,
+      }
+  
+      let uploadedDetail = []
+  
+      if (foundedPose.detail && foundedPose.detail.length > 0) {
+        uploadedDetail = [...foundedPose.detail]
+        uploadedDetail.push(detail)
+      } else {
+        uploadedDetail.push(detail)
+      }
+  
+      const poseDetails = {
+        ...foundedPose,
+        detail: uploadedDetail,
+      }
+  
+      await UpdatePoseById(poseDetails, pool)
+  
+      const response = h.response({
+        status: 'success',
+        pose: poseDetails,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(200)
+      return response
+    } catch (error) {
+      const response = h.response({
+        status: 'fail',
+        message: error.message,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(500)
+      return response
+    }
+  }
+
+
+  async updatePoseDetail(request, h) {
+    try {
+      const { step, time, image } = request.payload
+      const { poseId, stepId } = request.params
+      const { id: adminCredentials } = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials, pool)
+  
+      if (!isAdmin) {
+        const response = h.response({
+          status: 'fail',
+          message: 'You are not an admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      if (!poseId || !stepId || !step || !time || !image) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Not sending specific input',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      if (
+        typeof poseId !== 'string' ||
+        typeof stepId !== 'string' || // Fix the variable name from detailId to stepId
+        typeof step !== 'string' ||
+        typeof time !== 'string'
+      ) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Input does not meet specific datatypes',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      const foundedPose = await getPoseById(poseId, this._pool)
+  
+      if (!foundedPose) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Pose is not found',
+        })
+        response.code(400)
+        return response
+      }
+  
+      const existingDetail = foundedPose.detail.find((item) => item.stepId === stepId)
+  
+      if (!existingDetail) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Detail is not found',
+        })
+        response.code(400)
+        return response
+      }
+  
+      // Delete the existing image associated with the step
+      await this._gcpBucket.deleteFileFromBucket(existingDetail.image)
+  
+      // Upload the new image
+      const newImageUrl = await this._gcpBucket.uploadImagToBucket('step', image)
+  
+      const updatedDetail = {
+        stepId,
+        step,
+        time,
+        image: newImageUrl,
+      }
+  
+      const updatedDetails = foundedPose.detail.map((item) =>
+        item.stepId === stepId ? updatedDetail : item
+      )
+  
+      const poseDetails = {
+        ...foundedPose,
+        detail: updatedDetails,
+      }
+  
+      const res = await UpdatePoseById(poseDetails, pool)
+  
+      const response = h.response({
+        status: 'success',
+        pose: res,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(200)
+      return response
+    } catch (error) {
+      const response = h.response({
+        status: 'fail',
+        message: error.message,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(500)
+      return response
+    }
+  }
+  
+  
+  async deletePoseDetail(request, h) {
+    try {
+      const { poseId, stepId } = request.params
+      const { id: adminCredentials } = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials, pool)
+  
+      if (!isAdmin) {
+        const response = h.response({
+          status: 'fail',
+          message: 'You are not an admin',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      if (!poseId || !stepId) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Not sending specific input',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      if (typeof poseId !== 'string' || typeof stepId !== 'string') {
+        const response = h.response({
+          status: 'fail',
+          message: 'Input does not meet specific datatypes',
+        })
+        response.header('Access-Control-Allow-Origin', '*')
+        response.code(400)
+        return response
+      }
+  
+      const foundedPose = await getPoseById(poseId, this._pool)
+  
+      if (!foundedPose) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Pose is not found',
+        })
+        response.code(400)
+        return response
+      }
+  
+      const existingDetail = foundedPose.detail.find((item) => item.stepId === stepId)
+  
+      if (!existingDetail) {
+        const response = h.response({
+          status: 'fail',
+          message: 'Detail is not found',
+        })
+        response.code(400)
+        return response
+      }
+  
+      // Delete the existing image associated with the step
+      await this._gcpBucket.deleteFileFromBucket(existingDetail.image)
+  
+      // Filter out the deleted detail
+      const updatedDetails = foundedPose.detail.filter((item) => item.stepId !== stepId)
+  
+      const poseDetails = {
+        ...foundedPose,
+        detail: updatedDetails,
+      }
+  
+      const res = await UpdatePoseById(poseDetails, pool)
+  
+      const response = h.response({
+        status: 'success',
+        pose: res,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(200)
+      return response
+    } catch (error) {
+      const response = h.response({
+        status: 'fail',
+        message: error.message,
+      })
+      response.header('Access-Control-Allow-Origin', '*')
+      response.code(500)
+      return response
+    }
+  }
+  
 
   async getAllPosesHandler (request, h) {
     try {
@@ -154,8 +450,10 @@ class PosesHandler {
 
   async updatePoseHandler (request, h){
     const {
-      title,imageUrl, category, step, time
+      title,imageUrl, category
     } = request.payload
+
+    
 
     const {id} = request.params
 
@@ -170,7 +468,7 @@ class PosesHandler {
       response.code(400)
       return response
     }
-    if(!id||!title||!imageUrl||!category||!step||!time){
+    if(!id||!title||!imageUrl||!category){
       const response = h.response({
         status:'fail',
         mesage:'input dont have specific property'
@@ -182,8 +480,6 @@ class PosesHandler {
     if(
       typeof id !=='string'||
       typeof title !=='string'||
-        typeof step !=='string' ||
-        typeof time !=='string' ||
         typeof category !=='string'
     ){
       const response = h.response({
@@ -199,6 +495,7 @@ class PosesHandler {
     
    
     const foundedPose = await getPoseById(id,this._pool)
+    
     await this._gcpBucket.deleteFileFromBucket(foundedPose.imageUrl)
     if (imageUrl && imageUrl instanceof Buffer && imageUrl.length > 0) {
       const response = h.response({
@@ -209,19 +506,14 @@ class PosesHandler {
       return response
     }   
     const url = await this._gcpBucket.uploadImagToBucket('poses',imageUrl)
-    console.log(foundedPose)
     const updatedPose={
       id:foundedPose.id,
       title:title,
       imageUrl:url,
       category:category,
-      step:step,
-      time:time,
       updatedAt: new Date(Date.now()).toLocaleString()
     }
-
     await UpdatePoseById(updatedPose,this._pool)
-
     const response = h.response({
       status:'success',
       pose:updatedPose
@@ -230,25 +522,25 @@ class PosesHandler {
     return response
   }
 
-  async deletePoseByIdHandler(request,h){
+  async deletePoseByIdHandler(request, h) {
     try {
       const { id } = request.params
-      const {id:adminCredentials} = request.auth.credentials
-      const isAdmin = await areYouAdmin(adminCredentials,pool)
-      if(!isAdmin){
+      const { id: adminCredentials } = request.auth.credentials
+      const isAdmin = await areYouAdmin(adminCredentials, pool)
+  
+      if (!isAdmin) {
         const response = h.response({
           status: 'fail',
-          message: 'you are not admin',
+          message: 'You are not an admin',
         })
         response.header('Access-Control-Allow-Origin', '*')
         response.code(400)
         return response
       }
-      const foundedPose = await getPoseById(id,this._pool)
-      await this._gcpBucket.deleteFileFromBucket(foundedPose.imageUrl)
-      const pose = await deletePoseById(id, pool)
-
-      if (!pose) {
+  
+      const foundedPose = await getPoseById(id, this._pool)
+  
+      if (!foundedPose) {
         const notFoundResponse = h.response({
           status: 'fail',
           message: 'Pose not found',
@@ -257,7 +549,17 @@ class PosesHandler {
         notFoundResponse.code(404)
         return notFoundResponse
       }
-
+  
+      // Delete all images associated with the details
+      for (const detail of foundedPose.detail) {
+        await this._gcpBucket.deleteFileFromBucket(detail.image)
+      }
+  
+      // Delete the main image
+      await this._gcpBucket.deleteFileFromBucket(foundedPose.imageUrl)
+  
+      const pose = await deletePoseById(id, pool)
+  
       const successResponse = h.response({
         status: 'success',
         pose: pose,
@@ -275,6 +577,7 @@ class PosesHandler {
       return response
     }
   }
+  
 
   
 

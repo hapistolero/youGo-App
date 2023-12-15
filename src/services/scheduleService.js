@@ -131,8 +131,6 @@ const getUserAllSchedule =async (userId,pool)=>{
       id: item.id,
       title: item.title,
       category: item.category,
-      time: item.time,
-      step: item.step,
       imageUrl: item.imageUrl,
     })),
   }))
