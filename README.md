@@ -13,31 +13,31 @@
 
 ## Penggunaan API
 ### Endpoint 
-#### 1. Endpoint /Articles
+#### 1. Endpoint /articles
 
-`Post /Articles`
+`Post /articles`
 - Mengirim Artikel 
 - Dikirim melalui header multipart/form-data
-- Body Payload : id(text), title(text), description(text), imageUrl(file)
+- Body Payload : id(text), title(text), description(text), imageUrl(file), webUrl(text)
 
-`Get /Articles`
+`Get /articles`
 - Mengambil semua artikel
 
-`Get /Articles/{id}`
+`Get /articles/{id}`
 - Mengambil sebuah artikel berdasarkan ID-nya
 - id merupakan ID dari sebuah artikel
 
-`Put /Articles/{id}`
+`Put /articles/{id}`
 - Merubah Isi artikel
 - Dikrim melalui header multipart/form-data
 - id merupakan ID dari sebuah artikel
-- Body Payload : imageUrl(file), title(text), description(text)
+- Body Payload : imageUrl(file), title(text), description(text), webUrl(text)
 
-`Delete /Articles/{id}`
+`Delete /articles/{id}`
 - Menghapus sebuah artikel
 - id merupakan ID dari sebuah artikel
 
-#### 2. Endpoint /Authentications
+#### 2. Endpoint /authentications
 
 `POST/authentications`
 - Meminta access token
@@ -50,9 +50,23 @@
 `DELETE/authentications`
 - Menghapus access token
 
+#### 2. Endpoint /authenticationsAdmin
+
+`POST/authentications`
+- Meminta access token (admin)
+- Dikirim melalui header multipart/raw/JSON
+- Body Payload : email (string), password (string)
+  
+`PUT/authentications`
+- Memperbarui access token(admin)
+
+`DELETE/authentications`
+- Menghapus access token(admin)
+
 #### 3. Endpoint /Pose
 
 `POST/poses`
+-(admin)
 - Menambahkan pose yoga
 - Dikirim melalui multipart/form-data
 - Body Payload : id (string), title (string), imageUrl (file), category (string), step (string), time (string)
@@ -65,10 +79,12 @@
 - id merupakan ID dari sebuah artikel
 
 `DELETE/poses/{id}`
+-(admin)
 - Menghapus data pose yoga berdasarkan ID
 - id merupakan ID dari sebuah artikel
 
 `PUT/poses/{id}`
+-(admin)
 - Mengubah data pose yoga
 - Dikrim melalui header multipart/form-data
 - id merupakan ID dari sebuah artikel
@@ -97,8 +113,12 @@
 `POST/schedule`
 - Menambahkan data jadwal
 - Dikirim melalui header application/JSON
-- Body Payload : poseId, scheduleName (string), dayTime (string)
+- Body Payload : poseId(string array), scheduleName (string), dayTime (string)
 - Menggunakan user authentication
+- example : { "scheduleName": "sched123",
+              "dayTime":"friday",
+              "poseId":["P001","P003"]
+  }
 
 `GET/schedule`
 - Menampilkan semua data jadwal
@@ -122,5 +142,22 @@
 
 `POST/users`
 - Mendaftarkan account user
-- Dikirim melalui header multipart/raw/JSON
+- Dikirim melalui header JSON
 - Body Payload : email (string), password (string)
+
+### 6. Endpoint /yogaPlaceRecomendation
+
+`POST/yogaPlaceRecomendation`
+- mendapatkan rekomendasi tempat yoga dari keberadaan user
+- Body Payload : lattitude (string), longitude (string)
+
+### 6. Endpoint /checkMyPose/{id}
+
+`POST/checkMyPose/{id}`
+- cek pose yoga anda apakah sudah benar
+- id merupakan pose yoga mana yang akan anda bandingkan
+- Body Payload : image(file)
+
+ 
+
+
