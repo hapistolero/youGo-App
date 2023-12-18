@@ -95,6 +95,7 @@ async function getPoseById (poseId, pool) {
     title: pose.title,
     imageUrl: pose.imageUrl,
     category: pose.category,
+    total_time: Number(pose.detail.reduce((total, detail) => Number(total) + Number(detail.time), 0)),
     detail:pose.detail.map(detail =>({
       stepId:detail.stepId,
       image:detail.image,
