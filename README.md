@@ -63,32 +63,54 @@
 `DELETE/authentications`
 - Menghapus access token(admin)
 
-#### 3. Endpoint /Pose
+#### 3. Endpoint /poses
 
 `POST/poses`
 -(admin)
 - Menambahkan pose yoga
 - Dikirim melalui multipart/form-data
-- Body Payload : id (string), title (string), imageUrl (file), category (string), step (string), time (string)
+- Body Payload : id (string), title (string), imageUrl (file), category (string)
   
 `GET/poses`
 - Menampilkan semua data pose yoga
 
 `GET/poses/{id}`
 - Menampilkan data pose yoga berdasarkan ID
-- id merupakan ID dari sebuah artikel
+- id merupakan ID dari sebuah pose
 
 `DELETE/poses/{id}`
 -(admin)
 - Menghapus data pose yoga berdasarkan ID
-- id merupakan ID dari sebuah artikel
+- id merupakan ID dari sebuah pose
 
 `PUT/poses/{id}`
 -(admin)
 - Mengubah data pose yoga
 - Dikrim melalui header multipart/form-data
 - id merupakan ID dari sebuah artikel
-- Body Payload : id (string), title (string), imageUrl (file), category (string), step (string), time (string)
+- Body Payload : id (string), title (string), imageUrl (file), category (string)
+
+#### 3. Endpoint /poses/{poseId}/step
+
+`POST/poses/{poseId}/stepp`
+-(admin)
+- Menambahkan step dari pose yoga
+- Dikirim melalui multipart/form-data
+- Body Payload : step(string),time(string),image(file)
+  
+
+`DELETE/poses/{poseId}/step/{stepId}`
+-(admin)
+- Menghapus data detail(step) pose yoga berdasarkan poseId dan stepId nya
+
+`PUT/poses/{id}/step/{stepId}`
+-(admin)
+- Mengubah data detail(step) pose yoga berdasarkan poseId dan stepId nya
+- Dikrim melalui header multipart/form-data
+- Body Payload : step(string),time(string),image(file)
+
+
+
 
 #### 4. Endpoint /profile
 
