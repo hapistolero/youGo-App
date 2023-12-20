@@ -71,6 +71,7 @@ const getAllPoses = async (pool)=>{
     title: pose.title,
     imageUrl: pose.imageUrl,
     category: pose.category,
+    total_time: Number(pose.detail.reduce((total, detail) => Number(total) + Number(detail.time), 0)),
   }))
 
   return formattedPose
