@@ -1,4 +1,7 @@
-# Kumpulan Repository Dari Team youGo-App
+# Dokumentasi Aplikasi
 
-Untuk Mengetahui Pekerjaan Dari Setiap Team Mohon Pindah Branch Ya </br>
-Kalau Ingin Mengerjakan Di sini , mohon di push di branch yang benar
+Dokumentasi ini dibuat sebagai panduan bagi para pengguna
+
+`REGISTER`
+
+![Alt Text](relative_path_to_image)
