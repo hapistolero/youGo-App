@@ -43,4 +43,13 @@ This documentation is for user of this app.
 </br>
 </br>
 
+`YOGA POSE`
+
+![articles](assets/yogapose.gif)
+
+<p>There are lot of yoga pose, you can  choose it for your training purpose</p>
+
+</br>
+</br>
+
 
