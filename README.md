@@ -4,8 +4,6 @@ This documentation is for user of this app.
 
 </br>
 </br>
-</br>
-</br>
 
 `REGISTER`
 
@@ -15,6 +13,14 @@ This documentation is for user of this app.
 
 </br>
 </br>
+
+
+`LOGIN`
+
+![login](assets/login.gif)
+
+<p>User must input correct email and password in order to use the application</p>
+
 </br>
 </br>
 
@@ -26,6 +32,5 @@ This documentation is for user of this app.
 
 </br>
 </br>
-</br>
-</br>
+
 
