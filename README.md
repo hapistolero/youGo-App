@@ -34,3 +34,13 @@ This documentation is for user of this app.
 </br>
 
 
+`ARTICLES`
+
+![articles](assets/articles.gif)
+
+<p>This is articles page, you can search any articles you want</p>
+
+</br>
+</br>
+
+
