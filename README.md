@@ -54,9 +54,18 @@ This documentation is for user of this app.
 
 `CHECK YOUR POSE`
 
-![articles](assets/yogapose.gif)
+![articles](assets/checkYourPose.gif)
 
-<p>There are lot of yoga pose, you can  choose it for your training purpose</p>
+<p>you can check your pose is correct or not. photo yourself when doing some yoga training or upload existing photo of your when doing some yoga training </p>
+
+</br>
+</br>
+
+`CHECK YOUR BMI`
+
+![articles](assets/bmi.gif)
+
+<p>you can check your bmi, knowing your body mass index status and get any recomendation for improving your health</p>
 
 </br>
 </br>
