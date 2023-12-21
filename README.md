@@ -5,7 +5,7 @@ This documentation is for user of this app.
 </br>
 </br>
 
-`REGISTER`
+<h2>REGISTER</h2>
 
 ![register](assets/register.gif)
 
@@ -15,7 +15,7 @@ This documentation is for user of this app.
 </br>
 
 
-`LOGIN`
+<h2>LOGIN</h2>
 
 ![login](assets/login.gif)
 
@@ -24,7 +24,7 @@ This documentation is for user of this app.
 </br>
 </br>
 
-`MAIN`
+<h2>MAIN</h2>
 
 ![main](assets/main.gif)
 
@@ -34,7 +34,7 @@ This documentation is for user of this app.
 </br>
 
 
-`ARTICLES`
+<h2>ARTICLES</h2>
 
 ![articles](assets/articles.gif)
 
@@ -52,7 +52,8 @@ This documentation is for user of this app.
 </br>
 </br>
 
-`CHECK YOUR POSE`
+
+<h2>CHECK YOUR POSE</h2>
 
 ![articles](assets/checkYourPose.gif)
 
@@ -61,8 +62,7 @@ This documentation is for user of this app.
 </br>
 </br>
 
-`CHECK YOUR BMI`
-
+<h2>CHECK YOUR BMI</h2>
 ![articles](assets/bmi.gif)
 
 <p>you can check your bmi, knowing your body mass index status and get any recomendation for improving your health</p>
