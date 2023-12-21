@@ -33,4 +33,13 @@ This documentation is for user of this app.
 </br>
 </br>
 
+`Login`
+
+![login](assets/main.gif)
+
+<p>After Login The user can see the main page of application, there are articles and yoga pose training</p>
+
+</br>
+</br>
+
 
