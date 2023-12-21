@@ -45,7 +45,7 @@ This documentation is for user of this app.
 
 `YOGA POSE`
 
-![articles](assets/yogapose.gif)
+![pose](assets/yogapose.gif)
 
 <p>There are lot of yoga pose, you can  choose it for your training purpose</p>
 
@@ -55,7 +55,7 @@ This documentation is for user of this app.
 
 <h2>CHECK YOUR POSE</h2>
 
-![articles](assets/checkYourPose.gif)
+![check your pose](assets/checkYourPose.gif)
 
 <p>you can check your pose is correct or not. photo yourself when doing some yoga training or upload existing photo of your when doing some yoga training </p>
 
@@ -63,7 +63,8 @@ This documentation is for user of this app.
 </br>
 
 <h2>CHECK YOUR BMI</h2>
-![articles](assets/bmi.gif)
+
+![bmi](assets/bmi.gif)
 
 <p>you can check your bmi, knowing your body mass index status and get any recomendation for improving your health</p>
 
