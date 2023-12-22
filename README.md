@@ -7,6 +7,7 @@
 #### 1. Endpoint /articles
 
 ##### `POST /articles`
+- **(admin privilege)**
 - **Submit Article**
 - Sent via `multipart/form-data` header
 - Body Payload: `id` (text), `title` (text), `description` (text), `imageUrl` (file), `webUrl` (text)
@@ -19,12 +20,14 @@
 - `id` is the ID of an article
 
 ##### `PUT /articles/{id}`
+- **(admin privilege)**
 - **Update article content**
 - Sent via `multipart/form-data` header
 - `id` is the ID of an article
 - Body Payload: `imageUrl` (file), `title` (text), `description` (text), `webUrl` (text)
 
 ##### `DELETE /articles/{id}`
+- **(admin privilege)**
 - **Delete an article**
 - `id` is the ID of an article
 
@@ -32,32 +35,36 @@
 
 ##### `POST/authentications`
 - **Request access token**
-- Sent via `multipart/raw/JSON` header
+- Sent via `application/json` header
 - Body Payload: `email` (string), `password` (string)
   
 ##### `PUT/authentications`
 - **Refresh access token**
+- Body Payload: `refreshToken` (string)
 
 ##### `DELETE/authentications`
 - **Delete access token**
-
+- Body Payload: `refreshToken` (string)
+  
 #### 2. Endpoint /authenticationsAdmin
 
 ##### `POST/authentications`
 - **Request access token (admin)**
-- Sent via `multipart/raw/JSON` header
+- Sent via `application/json` header
 - Body Payload: `email` (string), `password` (string)
   
 ##### `PUT/authentications`
 - **Refresh access token (admin)**
+- Body Payload: `refreshToken` (string)
 
 ##### `DELETE/authentications`
 - **Delete access token (admin)**
+- Body Payload: `refreshToken` (string)
 
 #### 3. Endpoint /poses
 
 ##### `POST/poses`
--(admin)
+- **(admin privilege)**
 - **Add yoga pose**
 - Sent via `multipart/form-data`
 - Body Payload: `id` (string), `title` (string), `imageUrl` (file), `category` (string)
@@ -70,12 +77,12 @@
 - `id` is the ID of a pose
 
 ##### `DELETE/poses/{id}`
--(admin)
+- **(admin privilege)**
 - **Delete yoga pose data by ID**
 - `id` is the ID of a pose
 
 ##### `PUT/poses/{id}`
--(admin)
+- **(admin privilege)**
 - **Update yoga pose data**
 - Sent via `multipart/form-data` header
 - `id` is the ID of a pose
@@ -84,17 +91,17 @@
 #### 3. Endpoint /poses/{poseId}/step
 
 ##### `POST/poses/{poseId}/stepp`
--(admin)
+- **(admin privilege)**
 - **Add steps for a yoga pose**
 - Sent via `multipart/form-data`
 - Body Payload: `step` (string), `time` (string), `image` (file)
   
 ##### `DELETE/poses/{poseId}/step/{stepId}`
--(admin)
+- **(admin privilege)**
 - **Delete details (step) of a yoga pose based on poseId and stepId**
 
 ##### `PUT/poses/{id}/step/{stepId}`
--(admin)
+- **(admin privilege)**
 - **Update details (step) of a yoga pose based on poseId and stepId**
 - Sent via `multipart/form-data` header
 - Body Payload: `step` (string), `time` (string), `image` (file)
