@@ -177,5 +177,3 @@
 - **Check if your yoga pose is correct**
 - `id` is the pose to compare with
 - Body Payload: `image` (file)
-
-Feel free to customize the documentation based on your specific API implementation and requirements.
