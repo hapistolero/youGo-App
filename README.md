@@ -1,185 +1,167 @@
-# **youGo-App-API**
+#YouGo-App-Api
 
-## Urutan Mengerjakan 
-- Buat dulu service atau fungsi yang menggunakan pihak ketiga(firebase/gcp) untuk membuat fungsi yang digunakan untuk menyimpan data di firestore atau gcp.
-- Hubungkan service nya ke handler
-- Lalu buat handler -> routes ->index
-- Jangan lupa di register file nya di createServer.js
+##You can access the endpoint on this link
 
-#### Keterangan
-- Untuk membuat service, dibuat di folder service. Setiap handler dibuatkan service nya.
-- Untuk melihat handler, routes, API tolong dibuat di folder API (bisa lihat contoh sebelumnya ya).
-- Aplikasi utama server.js
+<a href="http://34.101.135.169">http://34.101.135.169<a>
 
-## Penggunaan API
-### Endpoint 
-#### 1. Endpoint /articles
+API Usage
+Endpoint
+1. Endpoint /articles
+Post /articles
 
-`Post /articles`
-- Mengirim Artikel 
-- Dikirim melalui header multipart/form-data
-- Body Payload : id(text), title(text), description(text), imageUrl(file), webUrl(text)
+Submit Article
+Sent via multipart/form-data header
+Body Payload: id (text), title (text), description (text), imageUrl (file), webUrl (text)
+Get /articles
 
-`Get /articles`
-- Mengambil semua artikel
+Get all articles
+Get /articles/{id}
 
-`Get /articles/{id}`
-- Mengambil sebuah artikel berdasarkan ID-nya
-- id merupakan ID dari sebuah artikel
+Get an article by ID
+id is the ID of an article
+Put /articles/{id}
 
-`Put /articles/{id}`
-- Merubah Isi artikel
-- Dikrim melalui header multipart/form-data
-- id merupakan ID dari sebuah artikel
-- Body Payload : imageUrl(file), title(text), description(text), webUrl(text)
+Update article content
+Sent via multipart/form-data header
+id is the ID of an article
+Body Payload: imageUrl (file), title (text), description (text), webUrl (text)
+Delete /articles/{id}
 
-`Delete /articles/{id}`
-- Menghapus sebuah artikel
-- id merupakan ID dari sebuah artikel
+Delete an article
+id is the ID of an article
+2. Endpoint /authentications
+POST/authentications
 
-#### 2. Endpoint /authentications
+Request access token
+Sent via multipart/raw/JSON header
+Body Payload: email (string), password (string)
+PUT/authentications
 
-`POST/authentications`
-- Meminta access token
-- Dikirim melalui header multipart/raw/JSON
-- Body Payload : email (string), password (string)
-  
-`PUT/authentications`
-- Memperbarui access token
+Refresh access token
+DELETE/authentications
 
-`DELETE/authentications`
-- Menghapus access token
+Delete access token
+2. Endpoint /authenticationsAdmin
+POST/authentications
 
-#### 2. Endpoint /authenticationsAdmin
+Request access token (admin)
+Sent via multipart/raw/JSON header
+Body Payload: email (string), password (string)
+PUT/authentications
 
-`POST/authentications`
-- Meminta access token (admin)
-- Dikirim melalui header multipart/raw/JSON
-- Body Payload : email (string), password (string)
-  
-`PUT/authentications`
-- Memperbarui access token(admin)
+Refresh access token (admin)
+DELETE/authentications
 
-`DELETE/authentications`
-- Menghapus access token(admin)
-
-#### 3. Endpoint /poses
-
-`POST/poses`
+Delete access token (admin)
+3. Endpoint /poses
+POST/poses
 -(admin)
-- Menambahkan pose yoga
-- Dikirim melalui multipart/form-data
-- Body Payload : id (string), title (string), imageUrl (file), category (string)
-  
-`GET/poses`
-- Menampilkan semua data pose yoga
 
-`GET/poses/{id}`
-- Menampilkan data pose yoga berdasarkan ID
-- id merupakan ID dari sebuah pose
+Add yoga pose
+Sent via multipart/form-data
+Body Payload: id (string), title (string), imageUrl (file), category (string)
+GET/poses
 
-`DELETE/poses/{id}`
+Display all yoga pose data
+GET/poses/{id}
+
+Display yoga pose data by ID
+id is the ID of a pose
+DELETE/poses/{id}
 -(admin)
-- Menghapus data pose yoga berdasarkan ID
-- id merupakan ID dari sebuah pose
 
-`PUT/poses/{id}`
+Delete yoga pose data by ID
+id is the ID of a pose
+PUT/poses/{id}
 -(admin)
-- Mengubah data pose yoga
-- Dikrim melalui header multipart/form-data
-- id merupakan ID dari sebuah artikel
-- Body Payload : id (string), title (string), imageUrl (file), category (string)
 
-#### 3. Endpoint /poses/{poseId}/step
-
-`POST/poses/{poseId}/stepp`
+Update yoga pose data
+Sent via multipart/form-data header
+id is the ID of a pose
+Body Payload: id (string), title (string), imageUrl (file), category (string)
+3. Endpoint /poses/{poseId}/step
+POST/poses/{poseId}/stepp
 -(admin)
-- Menambahkan step dari pose yoga
-- Dikirim melalui multipart/form-data
-- Body Payload : step(string),time(string),image(file)
-  
 
-`DELETE/poses/{poseId}/step/{stepId}`
+Add steps for a yoga pose
+Sent via multipart/form-data
+Body Payload: step (string), time (string), image (file)
+DELETE/poses/{poseId}/step/{stepId}
 -(admin)
-- Menghapus data detail(step) pose yoga berdasarkan poseId dan stepId nya
 
-`PUT/poses/{id}/step/{stepId}`
+Delete details (step) of a yoga pose based on poseId and stepId
+PUT/poses/{id}/step/{stepId}
 -(admin)
-- Mengubah data detail(step) pose yoga berdasarkan poseId dan stepId nya
-- Dikrim melalui header multipart/form-data
-- Body Payload : step(string),time(string),image(file)
 
+Update details (step) of a yoga pose based on poseId and stepId
+Sent via multipart/form-data header
+Body Payload: step (string), time (string), image (file)
+4. Endpoint /profile
+POST/profile
 
+Add user profile data
+Sent via application/JSON header
+Body Payload: id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
+Requires user authentication
+GET/profile
 
+Display all user profile data
+Requires user authentication
+PUT/profile
 
-#### 4. Endpoint /profile
+Update user profile data
+Sent via application/JSON header
+Body Payload: id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
+Requires user authentication
+5. Endpoint /schedule
+POST/schedule
 
-`POST/profile`
-- Menambahkan data profil user
-- Dikirim melalui header application/JSON
-- Body Payload : id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
-- Menggunakan user authentication
+Add schedule data
+Sent via application/JSON header
+Body Payload: poseId (string array), scheduleName (string), dayTime (string)
+Requires user authentication
+Example:
+json
+Copy code
+{
+  "scheduleName": "sched123",
+  "dayTime": "friday",
+  "poseId": ["P001", "P003"]
+}
+GET/schedule
 
-`GET/profile`
-- Menampilkan semua data profil user
-- Menggunakan user authentication
+Display all schedule data
+Requires user authentication
+GET/schedule/{id}
 
-`PUT/profile`
-- Mengupdate data profil user
-- Dikirim melalui header application/JSON
-- Body Payload : id (string), firstName (string), lastName (string), email (string), age (string), weight (string), height (string)
-- Menggunakan user authentication
-  
-#### 5. Endpoint /schedule
+Display all schedule data for a specific user based on ID
+id is the ID of a schedule
+Requires user authentication
+DELETE/schedule/{id}
 
-`POST/schedule`
-- Menambahkan data jadwal
-- Dikirim melalui header application/JSON
-- Body Payload : poseId(string array), scheduleName (string), dayTime (string)
-- Menggunakan user authentication
-- example : { "scheduleName": "sched123",
-              "dayTime":"friday",
-              "poseId":["P001","P003"]
-  }
+Delete schedule data for a specific user based on ID
+id is the ID of a schedule
+Requires user authentication
+PUT/schedule/{id}
 
-`GET/schedule`
-- Menampilkan semua data jadwal
-- Menggunakan user authentication
+Update schedule data
+Requires user authentication
+6. Endpoint /users
+POST/users
 
-`GET/schedule/{id}`
-- Menampilkan semua data jadwal user tertentu berdasarkan ID
-- id merupakan ID dari jadwal
-- Menggunakan user authentication
+Register user account
+Sent via JSON header
+Body Payload: email (string), password (string)
+6. Endpoint /yogaPlaceRecomendation
+POST/yogaPlaceRecomendation
 
-`DELETE/schedule/{id}`
-- Menghapus data jadwal user tertentu berdasarkan ID
-- id merupakan ID dari jadwal
-- Menggunakan user authentication
+Get yoga place recommendations based on user location
+Body Payload: latitude (string), longitude (string)
+6. Endpoint /checkMyPose/{id}
+POST/checkMyPose/{id}
 
-`PUT/schedule/{id}`
-- Mengubah data jadwal
-- Menggunakan user authentication
-
-### 6. Endpoint /users
-
-`POST/users`
-- Mendaftarkan account user
-- Dikirim melalui header JSON
-- Body Payload : email (string), password (string)
-
-### 6. Endpoint /yogaPlaceRecomendation
-
-`POST/yogaPlaceRecomendation`
-- mendapatkan rekomendasi tempat yoga dari keberadaan user
-- Body Payload : lattitude (string), longitude (string)
-
-### 6. Endpoint /checkMyPose/{id}
-
-`POST/checkMyPose/{id}`
-- cek pose yoga anda apakah sudah benar
-- id merupakan pose yoga mana yang akan anda bandingkan
-- Body Payload : image(file)
-
- 
+Check if your yoga pose is correct
+id is the pose to compare with
+Body Payload: image (file)
 
 
